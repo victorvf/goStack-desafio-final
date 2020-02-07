@@ -39,7 +39,7 @@ class UserController{
 
     async update(request,response){
         const {email, old_password} = request.body;
-        const user = await User.findByPk(request.params.id);
+        const user = await User.findByPk(request.userId);
 
         if(!user){
             return response.status(404).json({
@@ -85,7 +85,7 @@ class UserController{
         user.destroy();
 
         return response.json({
-            message: "sucess delete user"
+            message: "deleted user"
         });
     };
 };
