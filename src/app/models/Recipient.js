@@ -2,7 +2,7 @@ import Sequelize, {Model} from 'sequelize';
 
 class Recipient extends Model{
     static init(sequelize){
-        super.init('recipient',{
+        super.init({
             name: Sequelize.STRING,
             cep: Sequelize.STRING,
             state: Sequelize.STRING,
@@ -17,4 +17,4 @@ class Recipient extends Model{
     };
 };
 
-export default new Recipient();
+export default Recipient;
