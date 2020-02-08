@@ -8,6 +8,7 @@ class RecipientController{
 
         return response.json(recipients);
     };
+
     async show(request, response){
         const recipient = await Recipient.findByPk(request.params.id);
 
@@ -19,6 +20,7 @@ class RecipientController{
 
         return response.json(recipient);
     };
+
     async store(request, response){
         const schema = Yup.object().shape({
             name: Yup.string().required(),
@@ -36,7 +38,11 @@ class RecipientController{
             });
         };
 
-        const recipientExist = await Recipient.findOne({ where: { name: request.body.name }});
+        const recipientExist = await Recipient.findOne({
+            where: {
+                name: request.body.name
+            }
+        });
 
         if(recipientExist){
             return response.status(400).json({
@@ -48,6 +54,7 @@ class RecipientController{
 
         return response.json(recipient);
     };
+
     async update(request, response){
         const schema = Yup.object().shape({
             name: Yup.string(),
@@ -101,6 +108,7 @@ class RecipientController{
         return response.json(recipient);
 
     };
+
     async delete(request, response){
         const recipient = await Recipient.findByPk(request.params.id);
 
