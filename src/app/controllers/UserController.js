@@ -38,7 +38,11 @@ class UserController{
             });
         };
 
-        const userExist = await User.findOne({where: { email: request.body.email }});
+        const userExist = await User.findOne({
+            where: {
+                email: request.body.email
+            }
+        });
 
         if(userExist){
             return response.status(400).json({
@@ -72,7 +76,8 @@ class UserController{
             confirm_password: Yup.string.when(
                 'password',
                 (password, field) =>
-                password ? field.required().oneOf([Yup.ref('password')]) : field
+                password ? field.required()
+                    .oneOf([Yup.ref('password')]) : field
             )
         });
 
