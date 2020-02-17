@@ -3,19 +3,19 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
       return queryInterface.addColumn(
-          'deliverymans',
-          'avatar_id',
+          'orders',
+          'recipient_id',
           {
               type: Sequelize.INTEGER,
               references: {
-                  model: 'files',
+                  model: 'recipients',
                   key: 'id'
               },
               onUpdate: 'CASCADE',
               onDelete: 'SET NULL',
-              allowNull: true
+              allowNull: false
           });
   },
 
-  down: queryInterface => queryInterface.removeColumn('deliverymans', 'avatar_id'),
+  down: queryInterface => queryInterface.removeColumn('orders', 'recipient_id'),
 };
