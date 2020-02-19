@@ -1,4 +1,5 @@
 import Sequelize from 'sequelize';
+import mongoose from 'mongoose';
 
 import databaseConfig from '../config/database.js';
 
@@ -12,6 +13,7 @@ const models = [User, Recipient, Deliveryman, File];
 class Database{
     constructor(){
         this.init();
+        this.mongo();
     };
 
     init(){
@@ -24,6 +26,15 @@ class Database{
         models.map(
             model => model.associate && model.associate(this.connection.models)
         );
+    };
+
+    mongo(){
+        this.mongoConnection = mongoose.connect(
+            process.env.URL_MONGO,
+        {
+            useNewUrlParser: true,
+            useFindAndModify: true
+        });
     };
 };
 
