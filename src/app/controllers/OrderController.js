@@ -65,6 +65,7 @@ class OrderController{
             deliveryman,
         });
 
+        return response.json(order);
     };
 };
 
