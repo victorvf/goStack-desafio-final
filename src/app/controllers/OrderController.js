@@ -13,12 +13,12 @@ class OrderController{
         const schema = Yup.object().shape({
             product: Yup.string().required(),
             recipient_id: Yup.number().required(),
-            deliveryman_id: Yup.number().required()
+            deliveryman_id: Yup.number().required(),
         });
 
         if(!(await schema.isValid(request.body))){
             return response.status(400).json({
-                error: 'validation fails'
+                error: 'validation fails',
             });
         };
 
@@ -27,29 +27,29 @@ class OrderController{
                 product: request.body.product,
                 recipient_id: request.body.recipient_id,
                 deliveryman_id: request.body.deliveryman_id,
-                canceled_at: null
-            }
+                canceled_at: null,
+            },
         });
 
         if(orderExists){
             return response.status(400).json({
-                error: 'order already exists'
+                error: 'order already exists',
             });
         };
 
-        const recipientExist = await Recipient.findByPk(request.body.recipient_id);
+        const recipient = await Recipient.findByPk(request.body.recipient_id);
 
-        if(!recipientExist){
+        if(!recipient){
             return response.status(404).json({
-                error: 'recipient not found'
+                error: 'recipient not found',
             });
         };
 
-        const deliverymanExist = await Deliveryman.findByPk(request.body.deliveryman_id);
+        const deliveryman = await Deliveryman.findByPk(request.body.deliveryman_id);
 
-        if(!deliverymanExist){
+        if(!deliveryman){
             return response.status(404).json({
-                error: 'deliveryman not found'
+                error: 'deliveryman not found',
             });
         };
 
@@ -57,11 +57,12 @@ class OrderController{
 
         await Notification.create({
             content: `New order available - Product: ${order.product}, Code: ${order.id}`,
-            deliveryman: order.deliveryman_id
+            deliveryman: deliveryman.id,
         });
 
         await Queue.add(OrderAvailableMail.key, {
-            order
+            order,
+            deliveryman,
         });
 
     };
