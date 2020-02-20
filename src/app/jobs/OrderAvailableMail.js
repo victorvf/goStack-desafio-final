@@ -5,7 +5,7 @@ class OrderAvailableMail{
         return 'OrderAvailableMail';
     };
 
-    handle({ data }){
+    async handle({ data }){
         const { order, deliveryman } = data;
 
         await Mail.sendMail({
@@ -15,7 +15,7 @@ class OrderAvailableMail{
             context: {
                 deliveryman: deliveryman.name,
                 order_id: order.id,
-                order: order.name,
+                order: order.product,
             },
         });
     };
