@@ -3,7 +3,7 @@ import Deliveryman from '../models/Deliveryman';
 
 class DeliveredOrderController {
     async index(request, response){
-        const deliveryman = await Deliveryman.findByPk(request.userId);
+        const deliveryman = await Deliveryman.findByPk(request.params.id);
 
         if(!deliveryman){
             return response.status(404).json({
@@ -14,6 +14,8 @@ class DeliveredOrderController {
         const orders = await Order.findAll({
             where: {
                 start_date: !null,
+                end_date: !null,
+                canceled_at: null
             },
         });
 
