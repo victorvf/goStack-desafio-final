@@ -3,7 +3,7 @@ import Deliveryman from '../models/Deliveryman';
 
 class NotificationController {
     async index(request, response){
-        const deliveryman = await Deliveryman.findByPk(request.userId);
+        const deliveryman = await Deliveryman.findByPk(request.params.id);
 
         if(!deliveryman){
             return response.status(404).json({
