@@ -19,16 +19,15 @@ const upload = multer(multerConfig);
 
 routes.post('/session', SessionController.store);
 
-routes.use(authMiddleware.authenticated);
-
-routes.get('/recipients', RecipientController.index);
-routes.get('/recipient/:id', RecipientController.show);
-
-routes.get('/notifications', NotificationController.index);
+routes.get('/notifications/:id', NotificationController.index);
 routes.put('/notifications/:id/update', NotificationController.update);
 
-routes.get('orders/delivered', DeliveredOrderController.index);
+routes.get('/deliveryman/:id/orders-delivered', DeliveredOrderController.index);
 
+// authentication
+routes.use(authMiddleware.authenticated);
+
+// verify user is admin
 routes.use(authMiddleware.isAdmin);
 
 routes.get('/users', UserController.index);
@@ -37,6 +36,8 @@ routes.post('/user/create', UserController.store);
 routes.put('/user/update', UserController.update);
 routes.delete('/user/:id/delete', UserController.delete);
 
+routes.get('/recipients', RecipientController.index);
+routes.get('/recipient/:id', RecipientController.show);
 routes.post('/recipient/create', RecipientController.store);
 routes.put('/recipient/:id/update', RecipientController.update);
 routes.delete('/recipient/:id/delete', RecipientController.delete);
