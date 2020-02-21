@@ -1,10 +1,19 @@
 import Notification from '../schemas/Notification';
+import Deliveryman from '../models/Deliveryman';
 
 class NotificationController {
     async index(request, response){
+        const deliveryman = await Deliveryman.findByPk(request.userId);
+
+        if(!deliveryman){
+            return response.status(404).json({
+                error: 'Deliveryman not found',
+            });
+        };
+
         const notifications = await Notification
         .find({
-            deliveryman: request.userId,
+            deliveryman: deliveryman.id,
         })
         .sort({ createdAt: 'desc' })
         .limit(20);
