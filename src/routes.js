@@ -10,6 +10,7 @@ import FileController from './app/controllers/FileController.js';
 import DeliverymanController from './app/controllers/DeliverymanController.js';
 import OrderController from './app/controllers/OrderController.js';
 import NotificationController from './app/controllers/NotificationController.js';
+import DeliveredOrderController from './app/controllers/DeliveredOrderController.js';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -25,6 +26,8 @@ routes.get('/recipient/:id', RecipientController.show);
 
 routes.get('/notifications', NotificationController.index);
 routes.put('/notifications/:id/update', NotificationController.update);
+
+routes.get('orders/delivered', DeliveredOrderController.index);
 
 routes.use(authMiddleware.isAdmin);
 
