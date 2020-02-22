@@ -1,7 +1,7 @@
 import Order from '../models/Order';
 import Deliveryman from '../models/Deliveryman';
 
-class DeliveredOrderController {
+class CompletedDeliveriesController {
     async index(request, response){
         const deliveryman = await Deliveryman.findByPk(request.params.id);
 
@@ -29,4 +29,4 @@ class DeliveredOrderController {
     };
 };
 
-export default new DeliveredOrderController();
+export default new CompletedDeliveriesController();
