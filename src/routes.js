@@ -3,16 +3,16 @@ import multer from 'multer';
 
 import multerConfig from './config/multer';
 
-import UserController from './app/controllers/UserController.js';
-import RecipientController from './app/controllers/RecipientController.js';
-import SessionController from './app/controllers/SessionController.js';
-import FileController from './app/controllers/FileController.js';
-import DeliverymanController from './app/controllers/DeliverymanController.js';
-import OrderController from './app/controllers/OrderController.js';
-import NotificationController from './app/controllers/NotificationController.js';
-import CompletedDeliveriesController from './app/controllers/CompletedDeliveriesController.js';
-import DeliveriesController from './app/controllers/DeliveriesController.js';
-import CloseDeliveryController from './app/controllers/CloseDeliveryController.js';
+import UserController from './app/controllers/users/UserController';
+import RecipientController from './app/controllers/recipient/RecipientController';
+import SessionController from './app/controllers/session/SessionController';
+import FileController from './app/controllers/file/FileController';
+import DeliverymanController from './app/controllers/users/DeliverymanController';
+import OrderController from './app/controllers/deliveries/OrderController';
+import NotificationController from './app/controllers/notification/NotificationController';
+import CompletedDeliveriesController from './app/controllers/deliveries/CompletedDeliveriesController';
+import DeliveriesController from './app/controllers/deliveries/DeliveriesController';
+import CloseDeliveryController from './app/controllers/deliveries/CloseDeliveryController';
 
 import authMiddleware from './app/middlewares/auth';
 import adminMiddleware from './app/middlewares/admin';
