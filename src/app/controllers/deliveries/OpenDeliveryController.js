@@ -2,10 +2,10 @@ import * as Yup from 'yup';
 import { Op } from 'sequelize';
 import { isBefore, isAfter, parseISO, startOfHour, startOfDay, endOfDay } from 'date-fns';
 
-import Order from '../../models/Order';
+import Delivery from '../../models/Delivery';
 import Deliveryman from '../../models/Deliveryman';
 
-class DeliveriesController {
+class OpenDeliveryController {
     async index(request, response){
         const deliveryman = await Deliveryman.findByPk(request.params.id);
 
@@ -15,7 +15,7 @@ class DeliveriesController {
             });
         };
 
-        const orders = await Order.findAll({
+        const deliveries = await Delivery.findAll({
             where:{
                 end_date: null,
                 canceled_at: null,
@@ -23,13 +23,13 @@ class DeliveriesController {
             },
         });
 
-        if(!orders){
+        if(!deliveries){
             return response.status(404).json({
-                error: "you haven't orders for delivery"
+                error: "you haven't deliveries for delivery"
             });
         };
 
-        return response.json(orders);
+        return response.json(deliveries);
     };
 
     async update(request, response){
@@ -44,17 +44,17 @@ class DeliveriesController {
             });
         };
 
-        const order = await Order.findOne({
+        const delivery = await Delivery.findOne({
             where: {
-                id: request.body.order,
+                id: request.body.delivery,
                 deliveryman_id: request.params.id,
                 start_date: null,
             },
         });
 
-        if(!order){
+        if(!delivery){
             return response.status(400).json({
-                error: 'order is not available',
+                error: 'delivery is not available',
             });
         };
 
@@ -69,7 +69,7 @@ class DeliveriesController {
             });
         };
 
-        const orders = await Order.findAll({
+        const deliveries = await Delivery.findAll({
             where: {
                 deliveryman_id: request.params.id,
                 start_date: {
@@ -78,18 +78,18 @@ class DeliveriesController {
             },
         });
 
-        if(orders.length >= 5){
+        if(deliveries.length >= 5){
             return response.status(400).json({
                 error: 'you can only make 5 deliveries',
             });
         };
 
-        order.update({
+        delivery.update({
             start_date: date,
         });
 
-        return response.json(order);
+        return response.json(delivery);
     };
 };
 
-export default new DeliveriesController();
+export default new OpenDeliveryController();

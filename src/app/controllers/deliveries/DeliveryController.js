@@ -1,18 +1,18 @@
 import * as Yup from 'yup';
 
-import Order from '../../models/Order';
+import Delivery from '../../models/Delivery';
 import Recipient from '../../models/Recipient';
 import Deliveryman from '../../models/Deliveryman';
 import Notification from '../../schemas/Notification';
 
 import Queue from '../../../lib/Queue';
-import OrderAvailableMail from '../../jobs/OrderAvailableMail';
+import DeliveryAvailableMail from '../../jobs/DeliveryAvailableMail';
 
-class OrderController{
+class DeliveryController{
     async index(request, response){
         const { page = 1 } = request.query;
 
-        const orders = await Order.findAll({
+        const deliveries = await Delivery.findAll({
             where: {
                 canceled_at: null,
             },
@@ -34,13 +34,13 @@ class OrderController{
             ],
         });
 
-        return response.json(orders);
+        return response.json(deliveries);
     };
 
     async show(request, response){
-        const { order_id } = request.query;
+        const { delivery_id } = request.query;
 
-        const order = await Order.findByPk(order_id, {
+        const delivery = await Delivery.findByPk(delivery_id, {
             include: [
                 {
                     model: Deliveryman,
@@ -63,13 +63,13 @@ class OrderController{
             ],
         });
 
-        if(!order){
+        if(!delivery){
             return response.status(404).json({
-                error: 'Order not found',
+                error: 'Delivery not found',
             });
         };
 
-        return response.json(order);
+        return response.json(delivery);
     };
 
     async store(request, response){
@@ -85,7 +85,7 @@ class OrderController{
             });
         };
 
-        const orderExists = await Order.findOne({
+        const deliveryExists = await Delivery.findOne({
             where: {
                 product: request.body.product,
                 recipient_id: request.body.recipient_id,
@@ -94,7 +94,7 @@ class OrderController{
             },
         });
 
-        if(orderExists){
+        if(deliveryExists){
             return response.status(400).json({
                 error: 'order already exists',
             });
@@ -116,19 +116,19 @@ class OrderController{
             });
         };
 
-        const order = await Order.create(request.body);
+        const delivery = await Delivery.create(request.body);
 
         await Notification.create({
-            content: `New order available - Product: ${order.product}, Code: ${order.id}`,
+            content: `New delivery available - Product: ${delivery.product}, Code: ${delivery.id}`,
             deliveryman: deliveryman.id,
         });
 
-        await Queue.add(OrderAvailableMail.key, {
-            order,
+        await Queue.add(DeliveryAvailableMail.key, {
+            delivery,
             deliveryman,
         });
 
-        return response.json(order);
+        return response.json(delivery);
     };
 
     async update(request, response){
@@ -147,11 +147,11 @@ class OrderController{
             });
         };
 
-        const order = await Order.findByPk(request.params.id);
+        const delivery = await Delivery.findByPk(request.params.id);
 
-        if(!order){
+        if(!delivery){
             return response.status(404).json({
-                error: 'order not found',
+                error: 'delivery not found',
             });
         };
 
@@ -177,43 +177,43 @@ class OrderController{
             };
         };
 
-        await order.update(request.body);
+        await delivery.update(request.body);
 
         if(deliveryman){
             await Notification.create({
-                content: `New order available - Product: ${order.product}, Code: ${order.id}`,
+                content: `New delivery available - Product: ${delivery.product}, Code: ${delivery.id}`,
                 deliveryman: deliveryman.id,
             });
 
-            await Queue.add(OrderAvailableMail.key, {
-                order,
+            await Queue.add(DeliveryAvailableMail.key, {
+                delivery,
                 deliveryman,
             });
         } else{
             await Notification.create({
-                content: `Check order updated - Code: ${order.id}`,
-                deliveryman: order.deliveryman_id,
+                content: `Check delivery updated - Code: ${delivery.id}`,
+                deliveryman: delivery.deliveryman_id,
             });
         };
 
-        return response.json(order);
+        return response.json(delivery);
     };
 
     async delete(request, response){
-        const order = await Order.findByPk(request.params.id);
+        const delivery = await Delivery.findByPk(request.params.id);
 
-        if(order.start_date){
+        if(delivery.start_date){
             return response.status(400).json({
-                error: 'order has already been withdrawn',
+                error: 'delivery has already been withdrawn',
             });
         };
 
-        await order.destroy();
+        await delivery.destroy();
 
         return response.json({
-            message: 'order successfully deleted'
+            message: 'delivery successfully deleted'
         });
     };
 };
 
-export default new OrderController();
+export default new DeliveryController();
