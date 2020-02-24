@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 
 import Problem from '../../models/Problem';
-import Order from '../../models/Order';
+import Delivery from '../../models/Delivery';
 import Deliveryman from '../../models/Deliveryman';
 
 import Queue from '../../../lib/Queue';
@@ -12,8 +12,8 @@ class ProblemDeliveryController {
         const deliveriesProblem =  await Problem.findAll({
             include: [
                 {
-                    model: Order,
-                    as: 'order',
+                    model: Delivery,
+                    as: 'delivery',
                     attributes: ['id', 'product'],
                 },
             ],
@@ -29,11 +29,11 @@ class ProblemDeliveryController {
     };
 
     async show(request, response){
-        const { order_id } = request.body;
+        const { delivery_id } = request.body;
 
         const problems = await Problem.findAll({
             where: {
-                order_id,
+                delivery_id,
             },
         });
 
@@ -49,7 +49,7 @@ class ProblemDeliveryController {
     async store(request, response){
         const schema = Yup.object().shape({
             description: Yup.string().required(),
-            order_id: Yup.number().required(),
+            delivery_id: Yup.number().required(),
         });
 
         if(!(await schema.isValid(request.body))){
@@ -58,11 +58,11 @@ class ProblemDeliveryController {
             });
         };
 
-        const order = await Order.findByPk(request.body.order_id);
+        const delivery = await Delivery.findByPk(request.body.delivery_id);
 
-        if(!order){
+        if(!delivery){
             return response.status(404).json({
-                error: 'order not found',
+                error: 'delivery not found',
             });
         };
 
@@ -82,7 +82,7 @@ class ProblemDeliveryController {
     async update(request, response){
         const schema = Yup.object().shape({
             description: Yup.string(),
-            order_id: Yup.number(),
+            delivery_id: Yup.number(),
         });
 
         if(!(await schema.isValid(request.body))){
@@ -99,10 +99,10 @@ class ProblemDeliveryController {
             });
         };
 
-        if(request.body.order_id){
-            const order = await Order.findByPk(request.body.order_id);
+        if(request.body.delivery_id){
+            const delivery = await Delivery.findByPk(request.body.delivery_id);
 
-            if(!order){
+            if(!delivery){
                 return response.status(404).json({
                     error: 'delivery not found',
                 });
@@ -123,17 +123,17 @@ class ProblemDeliveryController {
             });
         };
 
-        const order = await Order.findByPk(problem.order_id);
+        const delivery = await Delivery.findByPk(problem.delivery_id);
 
-        if(!order){
+        if(!delivery){
             return response.status(404).json({
-                error: 'order not found',
+                error: 'delivery not found',
             });
         };
 
-        order.canceled_at = new Date();
+        delivery.canceled_at = new Date();
 
-        await order.reload({
+        await delivery.reload({
             include: [
                 {
                     model: Deliveryman,
@@ -144,10 +144,10 @@ class ProblemDeliveryController {
         });
 
         await Queue.add(CancelationMail.key, {
-            order,
+            delivery,
         });
 
-        return response.json(order);
+        return response.json(delivery);
     };
 };
 

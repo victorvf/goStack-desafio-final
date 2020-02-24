@@ -8,10 +8,10 @@ import RecipientController from './app/controllers/recipient/RecipientController
 import SessionController from './app/controllers/session/SessionController';
 import FileController from './app/controllers/file/FileController';
 import DeliverymanController from './app/controllers/users/DeliverymanController';
-import OrderController from './app/controllers/deliveries/OrderController';
+import DeliveryController from './app/controllers/deliveries/DeliveryController';
 import NotificationController from './app/controllers/notification/NotificationController';
 import CompletedDeliveriesController from './app/controllers/deliveries/CompletedDeliveriesController';
-import DeliveriesController from './app/controllers/deliveries/DeliveriesController';
+import OpenDeliveryController from './app/controllers/deliveries/OpenDeliveryController';
 import CloseDeliveryController from './app/controllers/deliveries/CloseDeliveryController';
 import ProblemDeliveryController from './app/controllers/deliveries/ProblemDeliveryController';
 
@@ -26,8 +26,8 @@ routes.post('/session', SessionController.store);
 routes.get('/notifications/:id', NotificationController.index);
 routes.put('/notifications/:id/update', NotificationController.update);
 
-routes.get('/deliveryman/:id/deliveries', DeliveriesController.index);
-routes.put('/deliveryman/:id/deliveries', DeliveriesController.update);
+routes.get('/deliveryman/:id/deliveries', OpenDeliveryController.index);
+routes.put('/deliveryman/:id/deliveries', OpenDeliveryController.update);
 
 routes.post('/file/create', upload.single('file'), FileController.store);
 
@@ -62,11 +62,11 @@ routes.post('/deliveryman/create', DeliverymanController.store);
 routes.put('/deliveryman/:id/update', DeliverymanController.update);
 routes.delete('/deliveryman/:id/delete', DeliverymanController.delete);
 
-routes.get('/orders', OrderController.index);
-routes.get('/order', OrderController.show);
-routes.post('/order/create', OrderController.store);
-routes.put('/order/:id/update', OrderController.update);
-routes.delete('/order/:id/delete', OrderController.delete);
+routes.get('/orders', DeliveryController.index);
+routes.get('/order', DeliveryController.show);
+routes.post('/order/create', DeliveryController.store);
+routes.put('/order/:id/update', DeliveryController.update);
+routes.delete('/order/:id/delete', DeliveryController.delete);
 
 routes.get('/delivery/problems', ProblemDeliveryController.index);
 routes.get('/delivery/:id/problems', ProblemDeliveryController.show);
