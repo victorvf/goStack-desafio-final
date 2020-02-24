@@ -13,6 +13,7 @@ import NotificationController from './app/controllers/notification/NotificationC
 import CompletedDeliveriesController from './app/controllers/deliveries/CompletedDeliveriesController';
 import DeliveriesController from './app/controllers/deliveries/DeliveriesController';
 import CloseDeliveryController from './app/controllers/deliveries/CloseDeliveryController';
+import ProblemDeliveryController from './app/controllers/deliveries/ProblemDeliveryController';
 
 import authMiddleware from './app/middlewares/auth';
 import adminMiddleware from './app/middlewares/admin';
@@ -33,6 +34,9 @@ routes.post('/file/create', upload.single('file'), FileController.store);
 routes.put('/deliveryman/:id/close-delivery', CloseDeliveryController.update);
 
 routes.get('/deliveryman/:id/orders-delivered', CompletedDeliveriesController.index);
+
+routes.post('/delivery/:id/create-problem', ProblemDeliveryController.store);
+
 
 // authentication
 routes.use(authMiddleware);
@@ -63,5 +67,10 @@ routes.get('/order', OrderController.show);
 routes.post('/order/create', OrderController.store);
 routes.put('/order/:id/update', OrderController.update);
 routes.delete('/order/:id/delete', OrderController.delete);
+
+routes.get('/delivery/problems', ProblemDeliveryController.index);
+routes.get('/delivery/:id/problems', ProblemDeliveryController.show);
+routes.put('/delivery/:id/update-problem', ProblemDeliveryController.update);
+routes.delete('/delivery/:id/cancel-delivery', ProblemDeliveryController.delete);
 
 export default routes;
