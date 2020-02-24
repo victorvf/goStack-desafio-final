@@ -22,6 +22,7 @@ class CompletedDeliveriesController {
                 canceled_at: null,
                 deliveryman_id: deliveryman.id,
             },
+            attributes: ['id', 'product', 'canceled_at', 'start_date', 'end_date'],
         });
 
         if(!deliveries){

@@ -118,6 +118,17 @@ class DeliveryController{
 
         const delivery = await Delivery.create(request.body);
 
+        await delivery.reload({
+            attributes: ['id', 'product'],
+            include: [
+                {
+                    model: Deliveryman,
+                    as: 'deliveryman',
+                    attributes: ['name', 'email'],
+                },
+            ],
+        });
+
         await Notification.create({
             content: `New delivery available - Product: ${delivery.product}, Code: ${delivery.id}`,
             deliveryman: deliveryman.id,
@@ -125,16 +136,12 @@ class DeliveryController{
 
         await Queue.add(DeliveryAvailableMail.key, {
             delivery,
-            deliveryman,
         });
 
         return response.json(delivery);
     };
 
     async update(request, response){
-        let deliveryman = null;
-        let recipient = null;
-
         const schema = Yup.object().shape({
             product: Yup.string(),
             recipient_id: Yup.number(),
@@ -157,7 +164,7 @@ class DeliveryController{
 
         if(request.body.recipient_id){
 
-            recipient = await Deliveryman.findByPk(request.body.recipient_id);
+            const recipient = await Deliveryman.findByPk(request.body.recipient_id);
 
             if(!recipient){
                 return response.status(404).json({
@@ -168,7 +175,7 @@ class DeliveryController{
 
         if(request.body.deliveryman_id){
 
-            deliveryman = await Deliveryman.findByPk(request.body.deliveryman_id);
+            const deliveryman = await Deliveryman.findByPk(request.body.deliveryman_id);
 
             if(!deliveryman){
                 return response.status(404).json({
@@ -179,17 +186,27 @@ class DeliveryController{
 
         await delivery.update(request.body);
 
-        if(deliveryman){
+        await delivery.reload({
+            attributes: ['id', 'product'],
+            include: [
+                {
+                    model: Deliveryman,
+                    as: 'deliveryman',
+                    attributes: ['name', 'email'],
+                },
+            ],
+        });
+
+        if(request.body.deliveryman_id) {
             await Notification.create({
                 content: `New delivery available - Product: ${delivery.product}, Code: ${delivery.id}`,
-                deliveryman: deliveryman.id,
+                deliveryman: delivery.deliveryman.id,
             });
 
             await Queue.add(DeliveryAvailableMail.key, {
                 delivery,
-                deliveryman,
             });
-        } else{
+        } else {
             await Notification.create({
                 content: `Check delivery updated - Code: ${delivery.id}`,
                 deliveryman: delivery.deliveryman_id,
@@ -211,7 +228,7 @@ class DeliveryController{
         await delivery.destroy();
 
         return response.json({
-            message: 'delivery successfully deleted'
+            message: 'delivery successfully deleted',
         });
     };
 };

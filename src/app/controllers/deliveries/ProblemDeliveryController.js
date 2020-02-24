@@ -10,6 +10,7 @@ import CancelationMail from '../../jobs/CancelationMail';
 class ProblemDeliveryController {
     async index(request, response){
         const deliveriesProblem =  await Problem.findAll({
+            attributes: ['id', 'description'],
             include: [
                 {
                     model: Delivery,
@@ -21,7 +22,7 @@ class ProblemDeliveryController {
 
         if(!deliveriesProblem){
             return response.status(404).json({
-                error: "haven't deliveries with problems"
+                error: "haven't deliveries with problems",
             });
         };
 
@@ -35,6 +36,14 @@ class ProblemDeliveryController {
             where: {
                 delivery_id,
             },
+            attributes: ['id', 'description'],
+            include: [
+                {
+                    model: Delivery,
+                    as: 'delivery',
+                    attributes: ['id', 'product'],
+                },
+            ],
         });
 
         if(!problems){
@@ -74,9 +83,13 @@ class ProblemDeliveryController {
             });
         };
 
-        const problem = await Problem.create(request.body);
+        const {id, description, delivery_id } = await Problem.create(request.body);
 
-        return response.json(problem);
+        return response.json({
+            id,
+            description,
+            delivery_id,
+        });
     };
 
     async update(request, response){
@@ -110,6 +123,17 @@ class ProblemDeliveryController {
         };
 
         await problem.update(request.body);
+
+        await problem.reload({
+            attributes: ['id', 'description'],
+            include: [
+                {
+                    model: Delivery,
+                    as: 'delivery',
+                    attributes: ['id', 'product'],
+                },
+            ],
+        });
 
         return response.json(problem);
     };

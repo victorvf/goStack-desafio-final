@@ -65,6 +65,10 @@ class CloseDeliveryController{
             signature_id: request.body.signature_id,
         });
 
+        await delivery.reload({
+            attributes: ['id', 'product', 'canceled_at', 'start_date', 'end_date'],
+        });
+
         return response.json(delivery);
     };
 };
