@@ -19,6 +19,7 @@ class DeliveriesController {
             where:{
                 end_date: null,
                 canceled_at: null,
+                deliveryman_id: deliveryman.id,
             },
         });
 
