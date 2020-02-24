@@ -13,9 +13,14 @@ class CompletedDeliveriesController {
 
         const orders = await Order.findAll({
             where: {
-                start_date: !null,
-                end_date: !null,
-                canceled_at: null
+                start_date: {
+                    $ne: null,
+                },
+                end_date: {
+                    $ne: null,
+                },
+                canceled_at: null,
+                deliveryman_id: deliveryman.id,
             },
         });
 
