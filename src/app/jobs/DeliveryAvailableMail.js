@@ -1,8 +1,8 @@
 import Mail from '../../lib/Mail';
 
-class CancelationMail{
+class DeliveryAvailableMail{
     get key(){
-        return 'CancelationMail';
+        return 'DeliveryAvailableMail';
     };
 
     async handle({ data }){
@@ -10,15 +10,15 @@ class CancelationMail{
 
         await Mail.sendMail({
             to: `${delivery.deliveryman.name} <${delivery.deliveryman.email}>`,
-            subject: 'Encomenda Cancelada',
-            template: 'cancelation',
+            subject: 'Nova Encomenda Disponível',
+            template: 'available',
             context: {
                 deliveryman: delivery.deliveryman.name,
-                delivery_id: delivery.id,
+                order_id: delivery.id,
                 delivery: delivery.product,
             },
         });
     };
 };
 
-export default new CancelationMail();
+export default new DeliveryAvailableMail();

@@ -18,7 +18,7 @@ class SessionController{
 
         if(!(await schema.isValid(request.body))){
             return response.status(400).json({
-                error: 'validation fails'
+                error: 'validation fails',
             });
         };
 
@@ -28,13 +28,13 @@ class SessionController{
 
         if (!user){
             return response.status(404).json({
-                error: "user not found"
+                error: "user not found",
             });
         }
 
         if(password && !(await user.checkPassword(password))){
             return response.status(400).json({
-                error: "password does not match"
+                error: "password does not match",
             });
         };
 

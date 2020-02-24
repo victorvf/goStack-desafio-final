@@ -4,17 +4,39 @@ import Recipient from '../../models/Recipient.js';
 
 class RecipientController{
     async index(request, response){
-        const recipients = await Recipient.findAll();
+        const recipients = await Recipient.findAll({
+            attributes: [
+                'id',
+                'name',
+                'cep',
+                'state',
+                'city',
+                'street',
+                'number',
+                'complement',
+            ],
+        });
 
         return response.json(recipients);
     };
 
     async show(request, response){
-        const recipient = await Recipient.findByPk(request.params.id);
+        const recipient = await Recipient.findByPk(request.params.id, {
+            attributes: [
+                'id',
+                'name',
+                'cep',
+                'state',
+                'city',
+                'street',
+                'number',
+                'complement',
+            ],
+        });
 
         if(!recipient){
             return response.status(404).json({
-                error: "recipient not found"
+                error: "recipient not found",
             });
         };
 
@@ -50,9 +72,27 @@ class RecipientController{
             });
         };
 
-        const recipient = await Recipient.create(request.body);
+        const {
+            id,
+            name,
+            cep,
+            state,
+            city,
+            street,
+            number,
+            complement,
+        } = await Recipient.create(request.body);
 
-        return response.json(recipient);
+        return response.json({
+            id,
+            name,
+            cep,
+            state,
+            city,
+            street,
+            number,
+            complement,
+        });
     };
 
     async update(request, response){
@@ -65,22 +105,22 @@ class RecipientController{
                 cep ? field.required() : field
             ),
             city: Yup.string().when(
-                'cep',
-                (cep, field) =>
-                cep ? field.required() : field
+                'street',
+                (street, field) =>
+                street ? field.required() : field
             ),
             state: Yup.string().when(
-                'cep',
-                (cep, field) =>
-                cep ? field.required() : field
+                'city',
+                (city, field) =>
+                city ? field.required() : field
             ),
             number: Yup.number(),
-            complement: Yup.string()
+            complement: Yup.string(),
         });
 
         if(!(await schema.isValid(request.body))){
             return response.status(400).json({
-                error: 'validation fails'
+                error: 'validation fails',
             });
         };
 
@@ -89,7 +129,7 @@ class RecipientController{
 
         if(!recipient){
             return response.status(404).json({
-                error: "recipient not found"
+                error: "recipient not found",
             });
         };
 
@@ -98,15 +138,27 @@ class RecipientController{
 
             if(recipientExist){
                 return response.status(400).json({
-                    error: 'recipient already exists'
+                    error: 'recipient already exists',
                 });
             };
         };
 
-        recipient.update(request.body);
+        await recipient.update(request.body);
+
+        await recipient.reload({
+            attributes: [
+                'id',
+                'name',
+                'cep',
+                'state',
+                'city',
+                'street',
+                'number',
+                'complement',
+            ],
+        });
 
         return response.json(recipient);
-
     };
 
     async delete(request, response){
@@ -114,14 +166,14 @@ class RecipientController{
 
         if(!recipient){
             return response.status(404).json({
-                error: "recipient not found"
+                error: "recipient not found",
             });
         };
 
-        recipient.destroy();
+        await recipient.destroy();
 
         return response.json({
-            message: "deleted recipient"
+            message: "deleted recipient",
         });
     };
 };

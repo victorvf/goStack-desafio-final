@@ -1,4 +1,4 @@
-import Order from '../../models/Order';
+import Delivery from '../../models/Delivery';
 import Deliveryman from '../../models/Deliveryman';
 
 class CompletedDeliveriesController {
@@ -11,7 +11,7 @@ class CompletedDeliveriesController {
             });
         };
 
-        const orders = await Order.findAll({
+        const deliveries = await Delivery.findAll({
             where: {
                 start_date: {
                     $ne: null,
@@ -22,15 +22,16 @@ class CompletedDeliveriesController {
                 canceled_at: null,
                 deliveryman_id: deliveryman.id,
             },
+            attributes: ['id', 'product', 'canceled_at', 'start_date', 'end_date'],
         });
 
-        if(!orders){
+        if(!deliveries){
             return response.status(404).json({
-                error: "You haven't orders delivered"
+                error: "You haven't deliveries delivered"
             });
         };
 
-        return response.json(orders);
+        return response.json(deliveries);
     };
 };
 

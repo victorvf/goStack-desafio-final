@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import { parseISO, isBefore, isAfter, startOfHour } from 'date-fns';
 
-import Order from '../../models/Order';
+import Delivery from '../../models/Delivery';
 import Deliveryman from '../../models/Deliveryman';
 import File from '../../models/File';
 
@@ -27,7 +27,7 @@ class CloseDeliveryController{
             });
         };
 
-        const order = await Order.findOne({
+        const delivery = await Delivery.findOne({
             where: {
                 id: request.body.order_id,
                 end_date: null,
@@ -35,9 +35,9 @@ class CloseDeliveryController{
             },
         });
 
-        if(!order){
+        if(!delivery){
             return response.status(404).json({
-                error: 'order not found',
+                error: 'delivery not found',
             });
         };
 
@@ -60,12 +60,16 @@ class CloseDeliveryController{
             });
         };
 
-        await order.update({
+        await delivery.update({
             end_date: request.body.end_date,
             signature_id: request.body.signature_id,
         });
 
-        return response.json(order);
+        await delivery.reload({
+            attributes: ['id', 'product', 'canceled_at', 'start_date', 'end_date'],
+        });
+
+        return response.json(delivery);
     };
 };
 

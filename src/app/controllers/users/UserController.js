@@ -4,17 +4,21 @@ import User from '../../models/User';
 
 class UserController{
     async index(request, response){
-        const users = await User.findAll();
+        const users = await User.findAll({
+            attributes: ['id', 'name', 'email', 'admin'],
+        });
 
         return response.json(users);
     };
 
     async show(request, response){
-        const user = await User.findByPk(request.params.id);
+        const user = await User.findByPk(request.params.id, {
+            attributes: ['id', 'name', 'email', 'admin'],
+        });
 
         if(!user){
             return response.status(404).json({
-                error: "User not found"
+                error: "User not found",
             });
         };
 
@@ -34,19 +38,19 @@ class UserController{
 
         if(!(await schema.isValid(request.body))){
             return response.status(400).json({
-                error: 'validation fails'
+                error: 'validation fails',
             });
         };
 
         const userExist = await User.findOne({
             where: {
-                email: request.body.email
-            }
+                email: request.body.email,
+            },
         });
 
         if(userExist){
             return response.status(400).json({
-                error: "user already exists"
+                error: "user already exists",
             });
         };
 
@@ -83,7 +87,7 @@ class UserController{
 
         if(!(await schema.isValid(request.body))){
             return response.status(400).json({
-                error: 'validation fails'
+                error: 'validation fails',
             });
         };
 
@@ -92,7 +96,7 @@ class UserController{
 
         if(!user){
             return response.status(404).json({
-                error: "user not found"
+                error: "user not found",
             });
         };
 
@@ -101,14 +105,14 @@ class UserController{
 
             if(userExist){
                 return response.status(401).json({
-                    error: "email already exists"
+                    error: "email already exists",
                 });
             };
         };
 
         if(old_password && !(user.checkPassword(old_password))){
            return response.status(401).json({
-               error: "password does not match"
+               error: "password does not match",
            });
         };
 
@@ -127,14 +131,14 @@ class UserController{
 
         if(!user){
             return response.status(404).json({
-                error: "user not found"
+                error: "user not found",
             });
         };
 
-        user.destroy();
+        await user.destroy();
 
         return response.json({
-            message: "deleted user"
+            message: "deleted user",
         });
     };
 };
