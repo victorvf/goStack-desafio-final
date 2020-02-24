@@ -1,12 +1,12 @@
 import Mail from '../../lib/Mail';
 
-class OrderAvailableMail{
+class DeliveryAvailableMail{
     get key(){
-        return 'OrderAvailableMail';
+        return 'DeliveryAvailableMail';
     };
 
     async handle({ data }){
-        const { order, deliveryman } = data;
+        const { delivery, deliveryman } = data;
 
         await Mail.sendMail({
             to: `${deliveryman.name} <${deliveryman.email}>`,
@@ -14,11 +14,11 @@ class OrderAvailableMail{
             template: 'available',
             context: {
                 deliveryman: deliveryman.name,
-                order_id: order.id,
-                order: order.product,
+                order_id: delivery.id,
+                delivery: delivery.product,
             },
         });
     };
 };
 
-export default new OrderAvailableMail();
+export default new DeliveryAvailableMail();
