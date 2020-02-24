@@ -6,14 +6,14 @@ class DeliveryAvailableMail{
     };
 
     async handle({ data }){
-        const { delivery, deliveryman } = data;
+        const { delivery } = data;
 
         await Mail.sendMail({
-            to: `${deliveryman.name} <${deliveryman.email}>`,
+            to: `${delivery.deliveryman.name} <${delivery.deliveryman.email}>`,
             subject: 'Nova Encomenda Disponível',
             template: 'available',
             context: {
-                deliveryman: deliveryman.name,
+                deliveryman: delivery.deliveryman.name,
                 order_id: delivery.id,
                 delivery: delivery.product,
             },
