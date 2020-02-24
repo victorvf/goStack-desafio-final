@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-import Recipient from '../models/Recipient.js';
+import Recipient from '../../models/Recipient.js';
 
 class RecipientController{
     async index(request, response){
