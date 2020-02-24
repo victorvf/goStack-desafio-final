@@ -7,9 +7,10 @@ import User from '../app/models/User.js';
 import Recipient from '../app/models/Recipient.js';
 import Deliveryman from '../app/models/Deliveryman.js';
 import File from '../app/models/File.js';
-import Order from '../app/models/Order.js';
+import Delivery from '../app/models/Delivery.js';
+import Problem from '../app/models/Problem.js';
 
-const models = [User, Recipient, Deliveryman, File, Order];
+const models = [User, Recipient, Deliveryman, File, Delivery, Problem];
 
 class Database{
     constructor(){
