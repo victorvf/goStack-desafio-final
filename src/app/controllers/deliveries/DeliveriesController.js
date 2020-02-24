@@ -2,8 +2,8 @@ import * as Yup from 'yup';
 import { Op } from 'sequelize';
 import { isBefore, isAfter, parseISO, startOfHour, startOfDay, endOfDay } from 'date-fns';
 
-import Order from '../models/Order';
-import Deliveryman from '../models/Deliveryman';
+import Order from '../../models/Order';
+import Deliveryman from '../../models/Deliveryman';
 
 class DeliveriesController {
     async index(request, response){

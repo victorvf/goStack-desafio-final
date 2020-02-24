@@ -1,5 +1,5 @@
-import Order from '../models/Order';
-import Deliveryman from '../models/Deliveryman';
+import Order from '../../models/Order';
+import Deliveryman from '../../models/Deliveryman';
 
 class CompletedDeliveriesController {
     async index(request, response){

@@ -1,5 +1,5 @@
-import Notification from '../schemas/Notification';
-import Deliveryman from '../models/Deliveryman';
+import Notification from '../../schemas/Notification';
+import Deliveryman from '../../models/Deliveryman';
 
 class NotificationController {
     async index(request, response){

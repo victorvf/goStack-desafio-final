@@ -1,12 +1,12 @@
 import * as Yup from 'yup';
 
-import Order from '../models/Order';
-import Recipient from '../models/Recipient';
-import Deliveryman from '../models/Deliveryman';
-import Notification from '../schemas/Notification';
+import Order from '../../models/Order';
+import Recipient from '../../models/Recipient';
+import Deliveryman from '../../models/Deliveryman';
+import Notification from '../../schemas/Notification';
 
-import Queue from '../../lib/Queue';
-import OrderAvailableMail from '../jobs/OrderAvailableMail';
+import Queue from '../../../lib/Queue';
+import OrderAvailableMail from '../../jobs/OrderAvailableMail';
 
 class OrderController{
     async index(request, response){
