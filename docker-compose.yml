@@ -23,7 +23,7 @@ services:
       POSTGRES_PASSWORD: admin
   node:
     build: .
-    image: gobarber:2.0
+    image: fastfeet:2.0
     command: yarn dev
     volumes:
       -  ./backend:/app/

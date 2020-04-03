@@ -13,7 +13,7 @@ class Problem extends Model {
     }
 
     static associate(models) {
-        this.belongsTo(models.Order, {
+        this.belongsTo(models.Delivery, {
             foreignKey: 'delivery_id',
             as: 'delivery',
         });
