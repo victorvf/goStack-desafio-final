@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 export const Container = styled.div`
     background: #fff;
@@ -25,16 +25,25 @@ export const Content = styled.div`
             padding-right: 20px;
             border-right: 1px solid #eee;
         }
+
+        a {
+            font-weight: bold;
+            font-size: 14px;
+            color: #999;
+
+            & + a {
+                margin-left: 12px;
+            }
+        }
     }
 `;
 
-export const LinkNav = styled(Link)`
-    font-weight: bold;
-    font-size: 14px;
-    color: ${(props) => (props.active ? '#333' : '#999')};
-
-    & + a {
-        margin-left: 12px;
+const isActiveClass = 'active';
+export const LinkNav = styled(NavLink).attrs({
+    isActiveClass,
+})`
+    &.${isActiveClass} {
+        color: #000;
     }
 `;
 

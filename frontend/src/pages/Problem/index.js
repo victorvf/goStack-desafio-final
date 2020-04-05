@@ -1,11 +1,15 @@
 import React from 'react';
-import { MdMoreHoriz } from 'react-icons/md';
+import { MdRemoveRedEye, MdEdit, MdDelete } from 'react-icons/md';
+
+import Actions from '~/components/Actions';
+
+import { ProblemTable } from './styles';
 
 export default function Problem() {
     return (
         <>
             <h1>Gerenciando entregadores</h1>
-            <table>
+            <ProblemTable>
                 <thead>
                     <tr>
                         <th>Encomenda</th>
@@ -21,9 +25,20 @@ export default function Problem() {
                             para entregar essa coisa
                         </td>
                         <td>
-                            <button type="button">
-                                <MdMoreHoriz size={20} color="#999" />
-                            </button>
+                            <Actions>
+                                <button type="button">
+                                    <MdRemoveRedEye color="#8E5BE8" />
+                                    Visualizar
+                                </button>
+                                <button type="button">
+                                    <MdEdit color="#4D85EE" />
+                                    Editar
+                                </button>
+                                <button type="button">
+                                    <MdDelete color="#DE3B3B" />
+                                    Excluir
+                                </button>
+                            </Actions>
                         </td>
                     </tr>
                     <tr>
@@ -33,9 +48,20 @@ export default function Problem() {
                             para entregar essa coisa
                         </td>
                         <td>
-                            <button type="button">
-                                <MdMoreHoriz size={20} color="#999" />
-                            </button>
+                            <Actions>
+                                <button type="button">
+                                    <MdRemoveRedEye color="#8E5BE8" />
+                                    Visualizar
+                                </button>
+                                <button type="button">
+                                    <MdEdit color="#4D85EE" />
+                                    Editar
+                                </button>
+                                <button type="button">
+                                    <MdDelete color="#DE3B3B" />
+                                    Excluir
+                                </button>
+                            </Actions>
                         </td>
                     </tr>
                     <tr>
@@ -45,13 +71,24 @@ export default function Problem() {
                             para entregar essa coisa
                         </td>
                         <td>
-                            <button type="button">
-                                <MdMoreHoriz size={20} color="#999" />
-                            </button>
+                            <Actions>
+                                <button type="button">
+                                    <MdRemoveRedEye color="#8E5BE8" />
+                                    Visualizar
+                                </button>
+                                <button type="button">
+                                    <MdEdit color="#4D85EE" />
+                                    Editar
+                                </button>
+                                <button type="button">
+                                    <MdDelete color="#DE3B3B" />
+                                    Excluir
+                                </button>
+                            </Actions>
                         </td>
                     </tr>
                 </tbody>
-            </table>
+            </ProblemTable>
         </>
     );
 }

@@ -1,21 +1,24 @@
 import React from 'react';
-import { MdSearch, MdAdd, MdMoreHoriz } from 'react-icons/md';
+import { MdSearch, MdRemoveRedEye, MdEdit, MdDelete } from 'react-icons/md';
+
+import Actions from '~/components/Actions';
+import RegisterButton from '~/components/RegisterButton';
+
+import { Search, SearchButton, DeliveryTable } from './styles';
 
 export default function Deliveries() {
     return (
         <>
             <h1>Gerenciando encomendas</h1>
-            <div>
-                <div>
+            <Search>
+                <SearchButton>
                     <MdSearch size={20} color="#999" />
                     <input type="text" placeholder="Buscar por encomendas" />
-                </div>
-                <button type="button">
-                    <MdAdd size={22} color="#fff" />
-                    CADASTRAR
-                </button>
-            </div>
-            <table>
+                </SearchButton>
+                <RegisterButton />
+            </Search>
+
+            <DeliveryTable>
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -38,9 +41,20 @@ export default function Deliveries() {
                             <span>ENTREGUE</span>
                         </td>
                         <td>
-                            <button type="button">
-                                <MdMoreHoriz size={20} color="#999" />
-                            </button>
+                            <Actions>
+                                <button type="button">
+                                    <MdRemoveRedEye color="#8E5BE8" />
+                                    Visualizar
+                                </button>
+                                <button type="button">
+                                    <MdEdit color="#4D85EE" />
+                                    Editar
+                                </button>
+                                <button type="button">
+                                    <MdDelete color="#DE3B3B" />
+                                    Excluir
+                                </button>
+                            </Actions>
                         </td>
                     </tr>
                     <tr>
@@ -49,11 +63,24 @@ export default function Deliveries() {
                         <td>Patricia Alencar</td>
                         <td>Teresina</td>
                         <td>Piaui</td>
-                        <td>Entregue</td>
                         <td>
-                            <button type="button">
-                                <MdMoreHoriz size={20} color="#999" />
-                            </button>
+                            <span>ENTREGUE</span>
+                        </td>
+                        <td>
+                            <Actions>
+                                <button type="button">
+                                    <MdRemoveRedEye color="#8E5BE8" />
+                                    Visualizar
+                                </button>
+                                <button type="button">
+                                    <MdEdit color="#4D85EE" />
+                                    Editar
+                                </button>
+                                <button type="button">
+                                    <MdDelete color="#DE3B3B" />
+                                    Excluir
+                                </button>
+                            </Actions>
                         </td>
                     </tr>
                     <tr>
@@ -62,15 +89,28 @@ export default function Deliveries() {
                         <td>Patricia Alencar</td>
                         <td>Teresina</td>
                         <td>Piaui</td>
-                        <td>Entregue</td>
                         <td>
-                            <button type="button">
-                                <MdMoreHoriz size={20} color="#999" />
-                            </button>
+                            <span>ENTREGUE</span>
+                        </td>
+                        <td>
+                            <Actions>
+                                <button type="button">
+                                    <MdRemoveRedEye color="#8E5BE8" />
+                                    Visualizar
+                                </button>
+                                <button type="button">
+                                    <MdEdit color="#4D85EE" />
+                                    Editar
+                                </button>
+                                <button type="button">
+                                    <MdDelete color="#DE3B3B" />
+                                    Excluir
+                                </button>
+                            </Actions>
                         </td>
                     </tr>
                 </tbody>
-            </table>
+            </DeliveryTable>
         </>
     );
 }
