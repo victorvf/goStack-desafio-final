@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const ProblemTable = styled.table`
     width: 100%;
-    margin-top: 25px;
+    margin-top: 35px;
     border-spacing: 0 1em;
 
     thead th {

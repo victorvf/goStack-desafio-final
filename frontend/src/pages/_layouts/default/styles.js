@@ -12,6 +12,5 @@ export const Content = styled.div`
     h1 {
         font-size: 24px;
         color: #444;
-        margin-bottom: 35px;
     }
 `;

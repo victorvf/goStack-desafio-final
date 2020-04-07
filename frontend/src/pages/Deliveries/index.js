@@ -1,8 +1,16 @@
 import React from 'react';
-import { MdSearch, MdRemoveRedEye, MdEdit, MdDelete } from 'react-icons/md';
+import {
+    MdSearch,
+    MdRemoveRedEye,
+    MdEdit,
+    MdDelete,
+    MdAdd,
+} from 'react-icons/md';
+
+import history from '~/services/history';
 
 import Actions from '~/components/Actions';
-import RegisterButton from '~/components/RegisterButton';
+import MainButton from '~/components/MainButton';
 
 import { Search, SearchButton, DeliveryTable } from './styles';
 
@@ -15,7 +23,13 @@ export default function Deliveries() {
                     <MdSearch size={20} color="#999" />
                     <input type="text" placeholder="Buscar por encomendas" />
                 </SearchButton>
-                <RegisterButton />
+
+                <MainButton
+                    onClick={() => history.push('/deliveries/register')}
+                >
+                    <MdAdd size={20} color="#fff" />
+                    CADASTRAR
+                </MainButton>
             </Search>
 
             <DeliveryTable>

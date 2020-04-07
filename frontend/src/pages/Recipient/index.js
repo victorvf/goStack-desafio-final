@@ -1,8 +1,10 @@
 import React from 'react';
-import { MdSearch, MdRemoveRedEye, MdEdit, MdDelete } from 'react-icons/md';
+import { MdSearch, MdEdit, MdDelete, MdAdd } from 'react-icons/md';
+
+import history from '~/services/history';
 
 import Actions from '~/components/Actions';
-import RegisterButton from '~/components/RegisterButton';
+import MainButton from '~/components/MainButton';
 
 import { Search, SearchButton, RecipientTable } from './styles';
 
@@ -15,7 +17,10 @@ export default function Recipient() {
                     <MdSearch size={20} color="#999" />
                     <input type="text" placeholder="Buscar por encomendas" />
                 </SearchButton>
-                <RegisterButton />
+                <MainButton onClick={() => history.push('/recipient/register')}>
+                    <MdAdd size={20} color="#fff" />
+                    CADASTRAR
+                </MainButton>
             </Search>
             <RecipientTable>
                 <thead>
@@ -34,10 +39,6 @@ export default function Recipient() {
                         <td>
                             <Actions>
                                 <button type="button">
-                                    <MdRemoveRedEye color="#8E5BE8" />
-                                    Visualizar
-                                </button>
-                                <button type="button">
                                     <MdEdit color="#4D85EE" />
                                     Editar
                                 </button>
@@ -55,10 +56,6 @@ export default function Recipient() {
                         <td>
                             <Actions>
                                 <button type="button">
-                                    <MdRemoveRedEye color="#8E5BE8" />
-                                    Visualizar
-                                </button>
-                                <button type="button">
                                     <MdEdit color="#4D85EE" />
                                     Editar
                                 </button>
@@ -75,10 +72,6 @@ export default function Recipient() {
                         <td>Rua Tomaz Rebelo, Teresina-Piaui</td>
                         <td>
                             <Actions>
-                                <button type="button">
-                                    <MdRemoveRedEye color="#8E5BE8" />
-                                    Visualizar
-                                </button>
                                 <button type="button">
                                     <MdEdit color="#4D85EE" />
                                     Editar

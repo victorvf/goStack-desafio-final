@@ -4,6 +4,7 @@ export const Search = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-top: 35px;
 `;
 
 export const SearchButton = styled.div`

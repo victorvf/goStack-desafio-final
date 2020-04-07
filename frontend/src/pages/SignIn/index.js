@@ -1,6 +1,8 @@
 import React from 'react';
 import { Form, Input } from '@rocketseat/unform';
 
+import MainButton from '~/components/MainButton';
+
 import logo from '~/assets/fastfeet-logo.png';
 
 export default function SignIn() {
@@ -23,7 +25,7 @@ export default function SignIn() {
                     placeholder="**********"
                 />
 
-                <button type="submit">Entrar no sistema</button>
+                <MainButton type="submit">Entrar no sistema</MainButton>
             </Form>
         </>
     );

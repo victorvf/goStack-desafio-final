@@ -1,8 +1,10 @@
 import React from 'react';
-import { MdSearch, MdRemoveRedEye, MdEdit, MdDelete } from 'react-icons/md';
+import { MdSearch, MdEdit, MdDelete, MdAdd } from 'react-icons/md';
+
+import history from '~/services/history';
 
 import Actions from '~/components/Actions';
-import RegisterButton from '~/components/RegisterButton';
+import MainButton from '~/components/MainButton';
 
 import { Search, SearchButton, DeliverymanTable } from './styles';
 
@@ -15,7 +17,12 @@ export default function Deliveryman() {
                     <MdSearch size={20} color="#999" />
                     <input type="text" placeholder="Buscar por entregadores" />
                 </SearchButton>
-                <RegisterButton />
+                <MainButton
+                    onClick={() => history.push('/deliveryman/register')}
+                >
+                    <MdAdd size={20} color="#fff" />
+                    CADASTRAR
+                </MainButton>
             </Search>
             <DeliverymanTable>
                 <thead>
@@ -36,10 +43,6 @@ export default function Deliveryman() {
                         <td>
                             <Actions>
                                 <button type="button">
-                                    <MdRemoveRedEye color="#8E5BE8" />
-                                    Visualizar
-                                </button>
-                                <button type="button">
                                     <MdEdit color="#4D85EE" />
                                     Editar
                                 </button>
@@ -58,10 +61,6 @@ export default function Deliveryman() {
                         <td>
                             <Actions>
                                 <button type="button">
-                                    <MdRemoveRedEye color="#8E5BE8" />
-                                    Visualizar
-                                </button>
-                                <button type="button">
                                     <MdEdit color="#4D85EE" />
                                     Editar
                                 </button>
@@ -79,10 +78,6 @@ export default function Deliveryman() {
                         <td>patricia@email.com</td>
                         <td>
                             <Actions>
-                                <button type="button">
-                                    <MdRemoveRedEye color="#8E5BE8" />
-                                    Visualizar
-                                </button>
                                 <button type="button">
                                     <MdEdit color="#4D85EE" />
                                     Editar

@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { darken } from 'polished';
 
 export const Wrapper = styled.div`
     height: 100%;
@@ -38,19 +37,6 @@ export const Content = styled.div`
             border-radius: 4px;
             color: #999;
             margin: 10px 0;
-        }
-
-        button {
-            background: #7d40e7;
-            border: 0;
-            border-radius: 4px;
-            padding: 12px 0;
-            color: #fff;
-            transition: background 0.2s;
-
-            &:hover {
-                background: ${darken(0.1, '#7d40e7')};
-            }
         }
     }
 `;
