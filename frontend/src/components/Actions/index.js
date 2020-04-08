@@ -4,7 +4,7 @@ import { MdMoreHoriz } from 'react-icons/md';
 
 import { Container, MoreButton, ActionsList } from './styles';
 
-export default function Actions({ children }) {
+export default function Actions({ children, ...props }) {
     const [visible, setVisible] = useState(false);
 
     function handleVisible() {
@@ -17,7 +17,9 @@ export default function Actions({ children }) {
                 <MdMoreHoriz size={20} color="#999" />
             </MoreButton>
 
-            <ActionsList visible={visible}>{children}</ActionsList>
+            <ActionsList visible={visible} {...props}>
+                {children}
+            </ActionsList>
         </Container>
     );
 }

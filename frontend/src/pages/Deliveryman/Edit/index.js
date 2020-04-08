@@ -10,11 +10,11 @@ import AvatarInput from '../AvatarInput';
 
 import { Container, Content } from './styles';
 
-export default function RegisterDeliveryman() {
+export default function EditDeliveryman() {
     return (
         <Container>
             <div>
-                <h1>Cadastro de encomendas</h1>
+                <h1>Edição de encomendas</h1>
                 <div>
                     <MainButton
                         back
@@ -35,13 +35,10 @@ export default function RegisterDeliveryman() {
                     <AvatarInput name="avatar_id" />
 
                     <span>Entregador</span>
-                    <Input
-                        name="deliveryman"
-                        placeholder="Nome do entregador"
-                    />
+                    <Input name="deliveryman" placeholder="John Doe" />
 
                     <span>Produto</span>
-                    <Input name="delivery" placeholder="Nome do produto" />
+                    <Input name="delivery" placeholder="Samsung J5" />
                 </Form>
             </Content>
         </Container>

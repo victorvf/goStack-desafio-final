@@ -8,11 +8,11 @@ import MainButton from '~/components/MainButton';
 
 import { Container, Content, FirstForm, LastForm } from './styles';
 
-export default function RegisterDelivery() {
+export default function EditDelivery() {
     return (
         <Container>
             <div>
-                <h1>Cadastro de encomendas</h1>
+                <h1>Edição de encomendas</h1>
                 <div>
                     <MainButton
                         back
@@ -35,22 +35,19 @@ export default function RegisterDelivery() {
                             <span>Destinatário</span>
                             <Input
                                 name="recipient"
-                                placeholder="Nome do destinatário"
+                                placeholder="Victor Fontenele"
                             />
                         </div>
 
                         <div>
                             <span>Entregador</span>
-                            <Input
-                                name="deliveryman"
-                                placeholder="Nome do entregador"
-                            />
+                            <Input name="deliveryman" placeholder="John Doe" />
                         </div>
                     </FirstForm>
 
                     <LastForm>
-                        <span>Produto</span>
-                        <Input name="delivery" placeholder="Nome do produto" />
+                        <span>Nome do produto</span>
+                        <Input name="delivery" placeholder="Samsung J5" />
                     </LastForm>
                 </Form>
             </Content>

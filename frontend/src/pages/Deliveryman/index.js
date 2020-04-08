@@ -42,7 +42,12 @@ export default function Deliveryman() {
                         <td>patricia@email.com</td>
                         <td>
                             <Actions>
-                                <button type="button">
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        history.push('deliveryman/edit')
+                                    }
+                                >
                                     <MdEdit color="#4D85EE" />
                                     Editar
                                 </button>
@@ -60,7 +65,12 @@ export default function Deliveryman() {
                         <td>patricia@email.com</td>
                         <td>
                             <Actions>
-                                <button type="button">
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        history.push('deliveryman/edit')
+                                    }
+                                >
                                     <MdEdit color="#4D85EE" />
                                     Editar
                                 </button>
@@ -78,7 +88,12 @@ export default function Deliveryman() {
                         <td>patricia@email.com</td>
                         <td>
                             <Actions>
-                                <button type="button">
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        history.push('deliveryman/edit')
+                                    }
+                                >
                                     <MdEdit color="#4D85EE" />
                                     Editar
                                 </button>

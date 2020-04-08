@@ -38,7 +38,12 @@ export default function Recipient() {
                         <td>Rua Tomaz Rebelo, Teresina-Piaui</td>
                         <td>
                             <Actions>
-                                <button type="button">
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        history.push('/recipient/edit')
+                                    }
+                                >
                                     <MdEdit color="#4D85EE" />
                                     Editar
                                 </button>
@@ -55,7 +60,12 @@ export default function Recipient() {
                         <td>Rua Tomaz Rebelo, Teresina-Piaui</td>
                         <td>
                             <Actions>
-                                <button type="button">
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        history.push('/recipient/edit')
+                                    }
+                                >
                                     <MdEdit color="#4D85EE" />
                                     Editar
                                 </button>
@@ -72,7 +82,12 @@ export default function Recipient() {
                         <td>Rua Tomaz Rebelo, Teresina-Piaui</td>
                         <td>
                             <Actions>
-                                <button type="button">
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        history.push('/recipient/edit')
+                                    }
+                                >
                                     <MdEdit color="#4D85EE" />
                                     Editar
                                 </button>

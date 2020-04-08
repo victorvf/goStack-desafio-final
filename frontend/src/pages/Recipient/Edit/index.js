@@ -8,11 +8,11 @@ import MainButton from '~/components/MainButton';
 
 import { Container, Content, FirstForm, MiddleForm, LastForm } from './styles';
 
-export default function RegisterRecipient() {
+export default function EditRecipient() {
     return (
         <Container>
             <div>
-                <h1>Cadastro de encomendas</h1>
+                <h1>Edição de encomendas</h1>
                 <div>
                     <MainButton back onClick={() => history.push('/recipient')}>
                         <MdKeyboardArrowLeft size={20} color="#fff" />
@@ -29,20 +29,20 @@ export default function RegisterRecipient() {
                 <Form>
                     <FirstForm>
                         <span>Nome</span>
-                        <Input name="name" placeholder="Nome do destinatário" />
+                        <Input name="name" placeholder="John Doe" />
                     </FirstForm>
                     <MiddleForm>
                         <div>
                             <span>Rua</span>
                             <Input
                                 name="street"
-                                placeholder="Ex. Rua de baixo"
+                                placeholder="Rua Joaquim Pires"
                             />
                         </div>
 
                         <div>
                             <span>Número</span>
-                            <Input name="number" placeholder="0000" />
+                            <Input name="number" placeholder="1068" />
                         </div>
 
                         <div>
@@ -53,17 +53,17 @@ export default function RegisterRecipient() {
                     <LastForm>
                         <div>
                             <span>Cidade</span>
-                            <Input name="city" placeholder="Nome da cidade" />
+                            <Input name="city" placeholder="Teresina" />
                         </div>
 
                         <div>
                             <span>Estado</span>
-                            <Input name="state" placeholder="Nome do estado" />
+                            <Input name="state" placeholder="PI" />
                         </div>
 
                         <div>
                             <span>CEP</span>
-                            <Input name="cep" placeholder="00.000-000" />
+                            <Input name="cep" placeholder="64.049-000" />
                         </div>
                     </LastForm>
                 </Form>
