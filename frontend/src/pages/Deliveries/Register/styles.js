@@ -20,11 +20,17 @@ export const Content = styled.div`
     form {
         width: 100%;
 
-        span {
+        strong {
             color: #444;
-            font-weight: bold;
             align-self: flex-start;
             margin-bottom: 10px;
+        }
+
+        span {
+            font-size: 14px;
+            align-self: flex-start;
+            color: rgba(255, 35, 35, 1);
+            margin: 5px 0 0;
         }
     }
 `;

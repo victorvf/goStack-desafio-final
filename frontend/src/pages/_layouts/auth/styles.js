@@ -27,7 +27,8 @@ export const Content = styled.div`
 
         span {
             font-size: 14px;
-            font-weight: bold;
+            color: rgba(255, 35, 35, 1);
+            margin: 0 0 5px;
         }
 
         input {

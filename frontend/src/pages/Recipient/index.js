@@ -15,7 +15,7 @@ export default function Recipient() {
             <Search>
                 <SearchButton>
                     <MdSearch size={20} color="#999" />
-                    <input type="text" placeholder="Buscar por encomendas" />
+                    <input type="text" placeholder="Buscar por destinatários" />
                 </SearchButton>
                 <MainButton onClick={() => history.push('/recipient/register')}>
                     <MdAdd size={20} color="#fff" />

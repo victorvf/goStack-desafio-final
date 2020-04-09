@@ -22,12 +22,18 @@ export const Content = styled.div`
         display: flex;
         flex-direction: column;
 
-        span {
+        strong {
             color: #444;
-            font-weight: bold;
             margin-bottom: 5px;
             margin-top: 15px;
             align-self: flex-start;
+        }
+
+        span {
+            font-size: 14px;
+            align-self: flex-start;
+            color: rgba(255, 35, 35, 1);
+            margin: 5px 0 0;
         }
 
         input {
@@ -53,7 +59,7 @@ export const MiddleForm = styled.div`
         margin-right: 15px;
 
         &:first-child {
-            span {
+            strong {
                 width: 500px;
             }
         }

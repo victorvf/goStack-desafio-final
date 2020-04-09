@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Yup from 'yup';
 import { Form, Input } from '@rocketseat/unform';
 import { MdDone, MdKeyboardArrowLeft } from 'react-icons/md';
 
@@ -8,7 +9,17 @@ import MainButton from '~/components/MainButton';
 
 import { Container, Content, FirstForm, LastForm } from './styles';
 
+const schema = Yup.object().shape({
+    recipient_id: Yup.number().integer('Destinatário inválido'),
+    deliveryman_id: Yup.number().integer('Entregador inválido'),
+    product: Yup.string('Produto inválido'),
+});
+
 export default function EditDelivery() {
+    function handleSubmit(data) {
+        console.tron.log(data);
+    }
+
     return (
         <Container>
             <div>
@@ -21,7 +32,7 @@ export default function EditDelivery() {
                         <MdKeyboardArrowLeft size={20} color="#fff" />
                         Voltar
                     </MainButton>
-                    <MainButton>
+                    <MainButton type="submit" form="form-delivery">
                         <MdDone size={20} color="#fff" />
                         Salvar
                     </MainButton>
@@ -29,25 +40,32 @@ export default function EditDelivery() {
             </div>
 
             <Content>
-                <Form>
+                <Form
+                    schema={schema}
+                    onSubmit={handleSubmit}
+                    id="form-delivery"
+                >
                     <FirstForm>
                         <div>
-                            <span>Destinatário</span>
+                            <strong>Destinatário</strong>
                             <Input
-                                name="recipient"
+                                name="recipient_id"
                                 placeholder="Victor Fontenele"
                             />
                         </div>
 
                         <div>
-                            <span>Entregador</span>
-                            <Input name="deliveryman" placeholder="John Doe" />
+                            <strong>Entregador</strong>
+                            <Input
+                                name="deliveryman_id"
+                                placeholder="John Doe"
+                            />
                         </div>
                     </FirstForm>
 
                     <LastForm>
-                        <span>Nome do produto</span>
-                        <Input name="delivery" placeholder="Samsung J5" />
+                        <strong>Nome do produto</strong>
+                        <Input name="product" placeholder="Samsung J5" />
                     </LastForm>
                 </Form>
             </Content>

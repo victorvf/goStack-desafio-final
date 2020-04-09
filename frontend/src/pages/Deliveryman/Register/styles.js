@@ -22,12 +22,18 @@ export const Content = styled.div`
         display: flex;
         flex-direction: column;
 
-        span {
+        strong {
             color: #444;
-            font-weight: bold;
             align-self: flex-start;
             margin-bottom: 10px;
             margin-top: 20px;
+        }
+
+        span {
+            font-size: 14px;
+            align-self: flex-start;
+            color: rgba(255, 35, 35, 1);
+            margin: 5px 0 0;
         }
 
         input {
