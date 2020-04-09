@@ -75,9 +75,13 @@ class UserController {
                 .when('old_password', (old_password, field) =>
                     old_password ? field.required() : field
                 ),
-            confirm_password: Yup.string.when('password', (password, field) =>
-                password ? field.required().oneOf([Yup.ref('password')]) : field
-            ),
+            confirm_password: Yup.string()
+                .min(6)
+                .when('password', (password, field) =>
+                    password
+                        ? field.required().oneOf([Yup.ref('password')])
+                        : field
+                ),
         });
 
         if (!(await schema.isValid(request.body))) {
