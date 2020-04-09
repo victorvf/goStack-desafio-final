@@ -1,5 +1,14 @@
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import { darken } from 'polished';
+
+const rotate = keyframes`
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+`;
 
 export const Button = styled.button`
     border: 0;
@@ -27,7 +36,17 @@ export const Button = styled.button`
             props.back ? darken(0.1, '#ccc') : darken(0.1, '#7d40e7')};
     }
 
-    svg {
-        margin-right: 5px;
-    }
+    ${(props) =>
+        props.loading
+            ? css`
+                  svg {
+                      margin-right: 5px;
+                      animation: ${rotate} 2s linear infinite;
+                  }
+              `
+            : css`
+                  svg {
+                      margin-right: 5px;
+                  }
+              `}
 `;

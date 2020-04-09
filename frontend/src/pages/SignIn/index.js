@@ -1,6 +1,10 @@
 import React from 'react';
-import { Form, Input } from '@rocketseat/unform';
 import * as Yup from 'yup';
+import { FaSpinner } from 'react-icons/fa';
+import { Form, Input } from '@rocketseat/unform';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { signInRequest } from '~/store/modules/auth/actions';
 
 import MainButton from '~/components/MainButton';
 
@@ -14,8 +18,11 @@ const schema = Yup.object().shape({
 });
 
 export default function SignIn() {
-    function handleSubmit(data) {
-        console.tron.log(data);
+    const dispatch = useDispatch();
+    const loading = useSelector((state) => state.auth.loading);
+
+    function handleSubmit({ email, password }) {
+        dispatch(signInRequest(email, password));
     }
 
     return (
@@ -37,7 +44,13 @@ export default function SignIn() {
                     placeholder="**********"
                 />
 
-                <MainButton type="submit">Entrar no sistema</MainButton>
+                <MainButton type="submit" loading={loading}>
+                    {loading ? (
+                        <FaSpinner size={20} color="#fff" />
+                    ) : (
+                        'Entrar no sistema'
+                    )}
+                </MainButton>
             </Form>
         </>
     );

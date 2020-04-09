@@ -19,6 +19,7 @@ export const Content = styled.div`
 
     img {
         margin: 0 auto 30px;
+        width: 240px;
     }
 
     form {
@@ -36,7 +37,7 @@ export const Content = styled.div`
             padding: 0 15px;
             border: 1px solid #ddd;
             border-radius: 4px;
-            color: #999;
+            color: #333;
             margin: 10px 0;
         }
     }
