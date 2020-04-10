@@ -16,7 +16,13 @@ class DeliveryController {
             where: {
                 canceled_at: null,
             },
-            attributes: ['id', 'product'],
+            attributes: [
+                'id',
+                'product',
+                'end_date',
+                'canceled_at',
+                'start_date'
+            ],
             limit: 20,
             offset: (page - 1) * 20,
             order: ['id'],
@@ -29,7 +35,16 @@ class DeliveryController {
                 {
                     model: Recipient,
                     as: 'recipient',
-                    attributes: ['id', 'name'],
+                    attributes: [
+                        'id',
+                        'name',
+                        'cep',
+                        'state',
+                        'city',
+                        'street',
+                        'number',
+                        'complement'
+                    ],
                 },
             ],
         });

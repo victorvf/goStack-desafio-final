@@ -48,7 +48,7 @@ class OpenDeliveryController {
 
     async update(request, response) {
         const schema = Yup.object().shape({
-            order: Yup.number().required(),
+            delivery: Yup.number().required(),
             start_date: Yup.date().required(),
         });
 

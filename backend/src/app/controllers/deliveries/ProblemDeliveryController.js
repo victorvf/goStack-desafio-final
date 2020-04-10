@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-import Problem from '../../models/Problem';
+import DeliveryProblem from '../../models/Problem';
 import Delivery from '../../models/Delivery';
 import Deliveryman from '../../models/Deliveryman';
 
@@ -9,7 +9,7 @@ import CancelationMail from '../../jobs/CancelationMail';
 
 class ProblemDeliveryController {
     async index(request, response) {
-        const deliveriesProblem = await Problem.findAll({
+        const deliveriesProblem = await DeliveryProblem.findAll({
             attributes: ['id', 'description'],
             include: [
                 {
@@ -32,7 +32,7 @@ class ProblemDeliveryController {
     async show(request, response) {
         const { delivery_id } = request.body;
 
-        const problems = await Problem.findAll({
+        const problems = await DeliveryProblem.findAll({
             where: {
                 delivery_id,
             },
@@ -76,7 +76,7 @@ class ProblemDeliveryController {
         }
 
         const deliveryman = await Deliveryman.findByPk(
-            request.params.deliveryman_id
+            request.params.id
         );
 
         if (!deliveryman) {
@@ -85,7 +85,7 @@ class ProblemDeliveryController {
             });
         }
 
-        const { id, description, delivery_id } = await Problem.create(
+        const { id, description, delivery_id } = await DeliveryProblem.create(
             request.body
         );
 
@@ -108,7 +108,7 @@ class ProblemDeliveryController {
             });
         }
 
-        const problem = await Problem.findByPk(request.params.id);
+        const problem = await DeliveryProblem.findByPk(request.params.id);
 
         if (!problem) {
             return response.status(404).json({
@@ -143,7 +143,7 @@ class ProblemDeliveryController {
     }
 
     async delete(request, response) {
-        const problem = await Problem.findByPk(request.params.id);
+        const problem = await DeliveryProblem.findByPk(request.params.id);
 
         if (!problem) {
             return response.status(404).json({
