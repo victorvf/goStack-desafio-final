@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MdSearch, MdEdit, MdDelete, MdAdd } from 'react-icons/md';
+import { toast } from 'react-toastify';
 
 import api from '~/services/api';
 import history from '~/services/history';
@@ -22,6 +23,26 @@ export default function Recipient() {
         loadRecipients();
     }, []);
 
+    async function handleRemove(id) {
+        const alertRemove = window.confirm(
+            'Tem certeza que deseja excluir o destinatário ?'
+        );
+
+        if (!alertRemove) return;
+
+        try {
+            api.delete(`/recipient/${id}/delete`);
+
+            const newRecipients = recipients.filter((r) => r.id !== id);
+
+            setRecipients(newRecipients);
+        } catch (err) {
+            toast.error('Falha ao excluir destinatário! Tente novamente');
+        } finally {
+            toast.success('Destinatário excluído com sucesso!');
+        }
+    }
+
     return (
         <>
             <h1>Gerenciando destinatários</h1>
@@ -35,42 +56,53 @@ export default function Recipient() {
                     CADASTRAR
                 </MainButton>
             </Search>
-            <RecipientTable>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Endereço</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {recipients.map((recipient) => (
+            {recipients.length === 0 ? (
+                <div>
+                    <p>Não possui destinatários</p>
+                </div>
+            ) : (
+                <RecipientTable>
+                    <thead>
                         <tr>
-                            <td>{`#${recipient.id}`}</td>
-                            <td>{recipient.name}</td>
-                            <td>{`${recipient.street}, ${recipient.city} - ${recipient.state}`}</td>
-                            <td>
-                                <Actions>
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            history.push('/recipient/edit')
-                                        }
-                                    >
-                                        <MdEdit color="#4D85EE" />
-                                        Editar
-                                    </button>
-                                    <button type="button">
-                                        <MdDelete color="#DE3B3B" />
-                                        Excluir
-                                    </button>
-                                </Actions>
-                            </td>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Endereço</th>
+                            <th>Ações</th>
                         </tr>
-                    ))}
-                </tbody>
-            </RecipientTable>
+                    </thead>
+                    <tbody>
+                        {recipients.map((recipient) => (
+                            <tr>
+                                <td>{`#${recipient.id}`}</td>
+                                <td>{recipient.name}</td>
+                                <td>{`${recipient.street}, ${recipient.city} - ${recipient.state}`}</td>
+                                <td>
+                                    <Actions>
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                history.push('/recipient/edit')
+                                            }
+                                        >
+                                            <MdEdit color="#4D85EE" />
+                                            Editar
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                handleRemove(recipient.id)
+                                            }
+                                        >
+                                            <MdDelete color="#DE3B3B" />
+                                            Excluir
+                                        </button>
+                                    </Actions>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </RecipientTable>
+            )}
         </>
     );
 }

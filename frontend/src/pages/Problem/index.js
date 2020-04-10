@@ -25,7 +25,7 @@ export default function Problem() {
     function handleProblemView(data) {
         const { description } = data;
 
-        setProblemView({description});
+        setProblemView({ description });
 
         setView(!view);
     }
@@ -40,52 +40,58 @@ export default function Problem() {
         <>
             <div>
                 <h1>Gerenciando entregadores</h1>
-                <ProblemTable>
-                    <thead>
-                        <tr>
-                            <th>Encomenda</th>
-                            <th>Problema</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {problems.map((problem) => (
+                {problems.length === 0 ? (
+                    <div>
+                        <p>Não possui problemas</p>
+                    </div>
+                ) : (
+                    <ProblemTable>
+                        <thead>
                             <tr>
-                                <td>{`#${problem.delivery.id} - ${problem.delivery.product}`}</td>
-                                <td>{problem.description}</td>
-                                <td>
-                                    <Actions problem>
-                                        <button
-                                            type="button"
-                                            onClick={() => handleProblemView(problem)}
-                                        >
-                                            <MdRemoveRedEye color="#8E5BE8" />
-                                            Visualizar
-                                        </button>
-
-                                        <button type="button">
-                                            <MdDelete color="#DE3B3B" />
-                                            Cancelar encomenda
-                                        </button>
-                                    </Actions>
-                                </td>
+                                <th>Encomenda</th>
+                                <th>Problema</th>
+                                <th>Ações</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </ProblemTable>
+                        </thead>
+                        <tbody>
+                            {problems.map((problem) => (
+                                <tr>
+                                    <td>{`#${problem.delivery.id} - ${problem.delivery.product}`}</td>
+                                    <td>{problem.description}</td>
+                                    <td>
+                                        <Actions problem>
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    handleProblemView(problem)
+                                                }
+                                            >
+                                                <MdRemoveRedEye color="#8E5BE8" />
+                                                Visualizar
+                                            </button>
+
+                                            <button type="button">
+                                                <MdDelete color="#DE3B3B" />
+                                                Cancelar encomenda
+                                            </button>
+                                        </Actions>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </ProblemTable>
+                )}
             </div>
 
             <View view={view}>
                 <ViewContent>
                     <HeaderView>
                         <strong>VISUALIZAR PROBLEMA:</strong>
-                        <button type="button" onClick={ () => handleCloseView()}>
+                        <button type="button" onClick={() => handleCloseView()}>
                             <MdClose size={20} color="#333" />
                         </button>
                     </HeaderView>
-                    <span>
-                        {problemView.description}
-                    </span>
+                    <span>{problemView.description}</span>
                 </ViewContent>
             </View>
         </>

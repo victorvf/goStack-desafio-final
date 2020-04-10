@@ -13,4 +13,11 @@ export const Content = styled.div`
         font-size: 24px;
         color: #444;
     }
+
+    p {
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: 10%;
+        margin-left: 40%;
+    }
 `;

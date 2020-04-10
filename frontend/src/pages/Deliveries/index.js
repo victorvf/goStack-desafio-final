@@ -9,6 +9,7 @@ import {
 } from 'react-icons/md';
 import { parseISO } from 'date-fns';
 import { format } from 'date-fns-tz';
+import { toast } from 'react-toastify';
 
 import api from '~/services/api';
 import history from '~/services/history';
@@ -90,6 +91,26 @@ export default function Deliveries() {
         setView(!view);
     }
 
+    async function handleRemove(id) {
+        const removeAlert = window.confirm(
+            'Tem certeza que deseja excluir a encomenda ?'
+        );
+
+        if (!removeAlert) return;
+
+        try {
+            await api.delete(`/order/${id}/delete`);
+
+            const newDeliveries = deliveries.filter((d) => d.id !== id);
+
+            setDeliveries(newDeliveries);
+        } catch (err) {
+            toast.error('Falha ao excluir encomenda! Tente novamente');
+        } finally {
+            toast.success('Encomenda excluída com sucesso!');
+        }
+    }
+
     return (
         <>
             <div>
@@ -111,62 +132,74 @@ export default function Deliveries() {
                         CADASTRAR
                     </MainButton>
                 </Search>
-
-                <DeliveryTable>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Destinatário</th>
-                            <th>Entregador</th>
-                            <th>Cidade</th>
-                            <th>Estado</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {deliveries.map((delivery) => (
-                            <tr key={delivery.id}>
-                                <td>{`#${delivery.id}`}</td>
-                                <td>{delivery.recipient.name}</td>
-                                <td>{delivery.deliveryman.name}</td>
-                                <td>{delivery.recipient.city}</td>
-                                <td>{delivery.recipient.state}</td>
-                                <td>
-                                    <Status status={delivery.status}>
-                                        {delivery.status}
-                                    </Status>
-                                </td>
-                                <td>
-                                    <Actions>
-                                        <button
-                                            type="button"
-                                            onClick={() =>
-                                                handleDeliveryView(delivery)
-                                            }
-                                        >
-                                            <MdRemoveRedEye color="#8E5BE8" />
-                                            Visualizar
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() =>
-                                                history.push('/deliveries/edit')
-                                            }
-                                        >
-                                            <MdEdit color="#4D85EE" />
-                                            Editar
-                                        </button>
-                                        <button type="button">
-                                            <MdDelete color="#DE3B3B" />
-                                            Excluir
-                                        </button>
-                                    </Actions>
-                                </td>
+                {deliveries.length === 0 ? (
+                    <div>
+                        <p>Não possui encomendas</p>
+                    </div>
+                ) : (
+                    <DeliveryTable>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Destinatário</th>
+                                <th>Entregador</th>
+                                <th>Cidade</th>
+                                <th>Estado</th>
+                                <th>Status</th>
+                                <th>Ações</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </DeliveryTable>
+                        </thead>
+                        <tbody>
+                            {deliveries.map((delivery) => (
+                                <tr key={delivery.id}>
+                                    <td>{`#${delivery.id}`}</td>
+                                    <td>{delivery.recipient.name}</td>
+                                    <td>{delivery.deliveryman.name}</td>
+                                    <td>{delivery.recipient.city}</td>
+                                    <td>{delivery.recipient.state}</td>
+                                    <td>
+                                        <Status status={delivery.status}>
+                                            {delivery.status}
+                                        </Status>
+                                    </td>
+                                    <td>
+                                        <Actions>
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    handleDeliveryView(delivery)
+                                                }
+                                            >
+                                                <MdRemoveRedEye color="#8E5BE8" />
+                                                Visualizar
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    history.push(
+                                                        '/deliveries/edit'
+                                                    )
+                                                }
+                                            >
+                                                <MdEdit color="#4D85EE" />
+                                                Editar
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    handleRemove(delivery.id)
+                                                }
+                                            >
+                                                <MdDelete color="#DE3B3B" />
+                                                Excluir
+                                            </button>
+                                        </Actions>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </DeliveryTable>
+                )}
             </div>
 
             <View view={view}>

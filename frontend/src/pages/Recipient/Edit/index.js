@@ -49,7 +49,7 @@ export default function EditRecipient() {
             <Content>
                 <Form
                     schema={schema}
-                    onSubmit={handleSubmit}
+                    onSubmit={() => handleSubmit()}
                     id="form-recipient"
                 >
                     <FirstForm>

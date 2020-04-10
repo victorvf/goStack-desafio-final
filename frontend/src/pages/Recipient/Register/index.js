@@ -43,7 +43,7 @@ export default function RegisterRecipient() {
             <Content>
                 <Form
                     schema={schema}
-                    onSubmit={handleSubmit}
+                    onSubmit={() => handleSubmit()}
                     id="form-recipient"
                 >
                     <FirstForm>

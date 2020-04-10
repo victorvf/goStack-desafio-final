@@ -45,7 +45,7 @@ export default function RegisterDeliveryman() {
             <Content>
                 <Form
                     schema={schema}
-                    onSubmit={handleSubmit}
+                    onSubmit={() => handleSubmit()}
                     id="form-deliveryman"
                 >
                     <AvatarInput name="avatar_id" />

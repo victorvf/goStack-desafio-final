@@ -46,7 +46,7 @@ export default function RegisterDelivery() {
             <Content>
                 <Form
                     schema={schema}
-                    onSubmit={handleSubmit}
+                    onSubmit={() => handleSubmit()}
                     id="form-delivery"
                 >
                     <FirstForm>
