@@ -25,5 +25,6 @@ export default function Actions({ children, ...props }) {
 }
 
 Actions.propTypes = {
-    children: PropTypes.element.isRequired,
+    children: PropTypes.oneOfType([PropTypes.array, PropTypes.element])
+        .isRequired,
 };

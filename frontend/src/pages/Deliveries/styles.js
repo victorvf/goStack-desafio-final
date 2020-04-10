@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { lighten } from 'polished';
 
 export const Search = styled.div`
     display: flex;
@@ -43,28 +44,68 @@ export const DeliveryTable = styled.table`
     tbody tr {
         height: 50px;
         text-align: center;
-
-        span {
-            background: #a8d080;
-            color: #2ca42b;
-            padding: 2px 8px 2px 16px;
-            border-radius: 12px;
-            position: relative;
-
-            ${css`
-                &::after {
-                    position: absolute;
-                    left: 4px;
-                    top: 6px;
-                    width: 8px;
-                    height: 8px;
-                    background: #2ca42b;
-                    content: '';
-                    border-radius: 50%;
-                }
-            `}
-        }
     }
+`;
+
+export const Status = styled.span.attrs({
+    delivered: '#2CA42B',
+    pending: '#C1BC35',
+    canceled: '#DE3B3B',
+    withdraw: '#4D85EE',
+})`
+    background: #a8d080;
+    padding: 2px 8px 2px 16px;
+    border-radius: 12px;
+    position: relative;
+
+    ${css`
+        &::after {
+            position: absolute;
+            left: 4px;
+            top: 6px;
+            width: 8px;
+            height: 8px;
+            background: ${(props) => {
+                switch (props.status) {
+                    case 'ENTREGUE':
+                        return props.delivered;
+                    case 'PENDENTE':
+                        return props.pending;
+                    case 'CANCELADA':
+                        return props.canceled;
+                    default:
+                        return props.withdraw;
+                }
+            }};
+            content: '';
+            border-radius: 50%;
+        }
+    `};
+
+    ${(props) => {
+        switch (props.status) {
+            case 'ENTREGUE':
+                return css`
+                    color: ${props.delivered};
+                    background: ${lighten(0.5, props.delivered)};
+                `;
+            case 'PENDENTE':
+                return css`
+                    color: ${props.pending};
+                    background: ${lighten(0.4, props.pending)};
+                `;
+            case 'CANCELADA':
+                return css`
+                    color: ${props.canceled};
+                    background: ${lighten(0.3, props.canceled)};
+                `;
+            default:
+                return css`
+                    color: ${props.withdraw};
+                    background: ${lighten(0.3, props.withdraw)};
+                `;
+        }
+    }};
 `;
 
 export const View = styled.div`

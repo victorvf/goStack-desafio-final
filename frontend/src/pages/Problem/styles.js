@@ -7,17 +7,19 @@ export const ProblemTable = styled.table`
 
     thead th {
         color: #444;
-        text-align: center;
+        padding-left: 30px;
+        text-align: left;
     }
 
     tbody td {
         background: #fff;
         border-radius: 4px;
+        padding-left: 30px;
     }
 
     tbody tr {
         height: 50px;
-        text-align: center;
+        text-align: left;
     }
 `;
 

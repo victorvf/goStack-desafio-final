@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { MdSearch, MdEdit, MdDelete, MdAdd } from 'react-icons/md';
 
+import api from '~/services/api';
 import history from '~/services/history';
 
 import Actions from '~/components/Actions';
@@ -9,6 +10,18 @@ import MainButton from '~/components/MainButton';
 import { Search, SearchButton, DeliverymanTable } from './styles';
 
 export default function Deliveryman() {
+    const [deliverymans, setDeliverymans] = useState([]);
+
+    useEffect(() => {
+        async function loadDeliverymen() {
+            const response = await api.get('/deliverymen');
+
+            setDeliverymans(response.data);
+        }
+
+        loadDeliverymen();
+    }, []);
+
     return (
         <>
             <h1>Gerenciando entregadores</h1>
@@ -35,75 +48,31 @@ export default function Deliveryman() {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>#01</td>
-                        <td>PA</td>
-                        <td>Patricia Alencar</td>
-                        <td>patricia@email.com</td>
-                        <td>
-                            <Actions>
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        history.push('deliveryman/edit')
-                                    }
-                                >
-                                    <MdEdit color="#4D85EE" />
-                                    Editar
-                                </button>
-                                <button type="button">
-                                    <MdDelete color="#DE3B3B" />
-                                    Excluir
-                                </button>
-                            </Actions>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>#01</td>
-                        <td>PA</td>
-                        <td>Patricia Alencar</td>
-                        <td>patricia@email.com</td>
-                        <td>
-                            <Actions>
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        history.push('deliveryman/edit')
-                                    }
-                                >
-                                    <MdEdit color="#4D85EE" />
-                                    Editar
-                                </button>
-                                <button type="button">
-                                    <MdDelete color="#DE3B3B" />
-                                    Excluir
-                                </button>
-                            </Actions>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>#01</td>
-                        <td>PA</td>
-                        <td>Patricia Alencar</td>
-                        <td>patricia@email.com</td>
-                        <td>
-                            <Actions>
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        history.push('deliveryman/edit')
-                                    }
-                                >
-                                    <MdEdit color="#4D85EE" />
-                                    Editar
-                                </button>
-                                <button type="button">
-                                    <MdDelete color="#DE3B3B" />
-                                    Excluir
-                                </button>
-                            </Actions>
-                        </td>
-                    </tr>
+                    {deliverymans.map((deliveryman) => (
+                        <tr key={deliveryman.id}>
+                            <td>{`#${deliveryman.id}`}</td>
+                            <td>PA</td>
+                            <td>{deliveryman.name}</td>
+                            <td>{deliveryman.email}</td>
+                            <td>
+                                <Actions>
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            history.push('deliveryman/edit')
+                                        }
+                                    >
+                                        <MdEdit color="#4D85EE" />
+                                        Editar
+                                    </button>
+                                    <button type="button">
+                                        <MdDelete color="#DE3B3B" />
+                                        Excluir
+                                    </button>
+                                </Actions>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </DeliverymanTable>
         </>

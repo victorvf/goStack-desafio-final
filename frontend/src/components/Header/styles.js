@@ -38,11 +38,11 @@ export const Content = styled.div`
     }
 `;
 
-const isActiveClass = 'active';
+const is_active_class = 'active';
 export const LinkNav = styled(NavLink).attrs({
-    isActiveClass,
+    is_active_class,
 })`
-    &.${isActiveClass} {
+    &.${is_active_class} {
         color: #000;
     }
 `;

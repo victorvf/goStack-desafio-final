@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MdRemoveRedEye, MdDelete, MdClose } from 'react-icons/md';
+
+import api from '~/services/api';
 
 import Actions from '~/components/Actions';
 
@@ -7,8 +9,30 @@ import { ProblemTable, View, ViewContent, HeaderView } from './styles';
 
 export default function Problem() {
     const [view, setView] = useState(false);
+    const [problems, setProblems] = useState([]);
+    const [problemView, setProblemView] = useState({});
 
-    function handleView() {
+    useEffect(() => {
+        async function loadProblems() {
+            const response = await api.get('/delivery/problems');
+
+            setProblems(response.data);
+        }
+
+        loadProblems();
+    }, []);
+
+    function handleProblemView(data) {
+        const { description } = data;
+
+        setProblemView({description});
+
+        setView(!view);
+    }
+
+    function handleCloseView() {
+        setProblemView({});
+
         setView(!view);
     }
 
@@ -25,66 +49,28 @@ export default function Problem() {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>#01</td>
-                            <td>
-                                Deu tal problema na entrega, porque não tava
-                                dando para entregar essa coisa
-                            </td>
-                            <td>
-                                <Actions problem>
-                                    <button type="button" onClick={handleView}>
-                                        <MdRemoveRedEye color="#8E5BE8" />
-                                        Visualizar
-                                    </button>
+                        {problems.map((problem) => (
+                            <tr>
+                                <td>{`#${problem.delivery.id} - ${problem.delivery.product}`}</td>
+                                <td>{problem.description}</td>
+                                <td>
+                                    <Actions problem>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleProblemView(problem)}
+                                        >
+                                            <MdRemoveRedEye color="#8E5BE8" />
+                                            Visualizar
+                                        </button>
 
-                                    <button type="button">
-                                        <MdDelete color="#DE3B3B" />
-                                        Cancelar encomenda
-                                    </button>
-                                </Actions>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#01</td>
-                            <td>
-                                Deu tal problema na entrega, porque não tava
-                                dando para entregar essa coisa
-                            </td>
-                            <td>
-                                <Actions problem>
-                                    <button type="button" onClick={handleView}>
-                                        <MdRemoveRedEye color="#8E5BE8" />
-                                        Visualizar
-                                    </button>
-
-                                    <button type="button">
-                                        <MdDelete color="#DE3B3B" />
-                                        Cancelar encomenda
-                                    </button>
-                                </Actions>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#01</td>
-                            <td>
-                                Deu tal problema na entrega, porque não tava
-                                dando para entregar essa coisa
-                            </td>
-                            <td>
-                                <Actions problem>
-                                    <button type="button" onClick={handleView}>
-                                        <MdRemoveRedEye color="#8E5BE8" />
-                                        Visualizar
-                                    </button>
-
-                                    <button type="button">
-                                        <MdDelete color="#DE3B3B" />
-                                        Cancelar encomenda
-                                    </button>
-                                </Actions>
-                            </td>
-                        </tr>
+                                        <button type="button">
+                                            <MdDelete color="#DE3B3B" />
+                                            Cancelar encomenda
+                                        </button>
+                                    </Actions>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </ProblemTable>
             </div>
@@ -93,21 +79,12 @@ export default function Problem() {
                 <ViewContent>
                     <HeaderView>
                         <strong>VISUALIZAR PROBLEMA:</strong>
-                        <button type="button" onClick={handleView}>
+                        <button type="button" onClick={ () => handleCloseView()}>
                             <MdClose size={20} color="#333" />
                         </button>
                     </HeaderView>
                     <span>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Donec in mauris et felis eleifend elementum vel quis
-                        lectus. Vivamus dapibus nisi augue, vitae ultrices
-                        ligula elementum at. Proin ut metus in mi tincidunt
-                        vestibulum a a felis. Aenean dictum libero eu urna
-                        tristique vestibulum. Fusce feugiat justo et augue
-                        facilisis, sit amet ornare eros consequat. Suspendisse
-                        semper risus feugiat nisl commodo, sed mollis neque
-                        auctor. Nullam eu fringilla lectus. Phasellus sed sapien
-                        sed turpis imperdiet maximus. Aenean ante nulla.
+                        {problemView.description}
                     </span>
                 </ViewContent>
             </View>

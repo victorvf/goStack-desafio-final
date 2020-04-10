@@ -8,5 +8,6 @@ export default function MainButton({ children, ...props }) {
 }
 
 MainButton.propTypes = {
-    children: PropTypes.element.isRequired,
+    children: PropTypes.oneOfType([PropTypes.element, PropTypes.array])
+        .isRequired,
 };
