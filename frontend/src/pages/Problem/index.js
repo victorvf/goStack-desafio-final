@@ -1,26 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { MdRemoveRedEye, MdDelete, MdClose } from 'react-icons/md';
+import { MdRemoveRedEye, MdDelete, MdClose, MdSearch } from 'react-icons/md';
 
 import api from '~/services/api';
 
 import Actions from '~/components/Actions';
 
-import { ProblemTable, View, ViewContent, HeaderView } from './styles';
+import {
+    ProblemTable,
+    View,
+    ViewContent,
+    HeaderView,
+    SearchButton,
+    Footer,
+} from './styles';
 
 export default function Problem() {
     const [view, setView] = useState(false);
     const [problems, setProblems] = useState([]);
     const [problemView, setProblemView] = useState({});
+    const [problemQuery, setProblemQuery] = useState('');
+    const [page, setPage] = useState(1);
 
     useEffect(() => {
         async function loadProblems() {
-            const response = await api.get('/delivery/problems');
+            const response = await api.get('/delivery/problems', {
+                params: { problemQuery, page },
+            });
 
             setProblems(response.data);
         }
 
         loadProblems();
-    }, []);
+    }, [problemQuery, page]);
 
     function handleProblemView(data) {
         const { description } = data;
@@ -36,10 +47,22 @@ export default function Problem() {
         setView(!view);
     }
 
+    function handleQuery(event) {
+        setProblemQuery(event.target.value);
+    }
+
     return (
         <>
             <div>
                 <h1>Gerenciando entregadores</h1>
+                <SearchButton>
+                    <MdSearch size={20} color="#999" />
+                    <input
+                        type="text"
+                        placeholder="Buscar por entregadores"
+                        onChange={handleQuery}
+                    />
+                </SearchButton>
                 {problems.length === 0 ? (
                     <div>
                         <p>Não possui problemas</p>
@@ -55,7 +78,7 @@ export default function Problem() {
                         </thead>
                         <tbody>
                             {problems.map((problem) => (
-                                <tr>
+                                <tr key={problem.id}>
                                     <td>{`#${problem.delivery.id} - ${problem.delivery.product}`}</td>
                                     <td>{problem.description}</td>
                                     <td>
@@ -82,6 +105,22 @@ export default function Problem() {
                     </ProblemTable>
                 )}
             </div>
+
+            <Footer>
+                <button
+                    type="button"
+                    disabled={page === 1}
+                    onClick={() => setPage(page - 1)}
+                >
+                    Anterior
+                </button>
+
+                <span>{`página: ${page}`}</span>
+
+                <button type="button" onClick={() => setPage(page + 1)}>
+                    Próxima
+                </button>
+            </Footer>
 
             <View view={view}>
                 <ViewContent>

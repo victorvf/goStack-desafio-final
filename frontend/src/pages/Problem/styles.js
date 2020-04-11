@@ -1,8 +1,28 @@
 import styled from 'styled-components';
 
+export const SearchButton = styled.div`
+    margin-top: 35px;
+    width: 235px;
+    background: #fff;
+    height: 36px;
+    padding: 0 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+
+    display: flex;
+    align-items: center;
+
+    input {
+        margin-left: 5px;
+        background: #fff;
+        height: 100%;
+        border: 0;
+    }
+`;
+
 export const ProblemTable = styled.table`
     width: 100%;
-    margin-top: 35px;
+    margin-top: 25px;
     border-spacing: 0 1em;
 
     thead th {
@@ -58,5 +78,26 @@ export const HeaderView = styled.div`
     button {
         border: 0;
         background: none;
+    }
+`;
+
+export const Footer = styled.footer`
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+    margin-top: 50px;
+
+    button {
+        background: none;
+        color: #444;
+        border: 1px solid #333;
+        border-radius: 4px;
+        padding: 8px;
+
+        &:disabled {
+            cursor: default;
+            opacity: 0.3;
+        }
     }
 `;

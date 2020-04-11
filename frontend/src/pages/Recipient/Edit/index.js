@@ -2,7 +2,10 @@ import React from 'react';
 import * as Yup from 'yup';
 import { Form, Input } from '@rocketseat/unform';
 import { MdDone, MdKeyboardArrowLeft } from 'react-icons/md';
+import InputMask from 'react-input-mask';
+import { toast } from 'react-toastify';
 
+import api from '~/services/api';
 import history from '~/services/history';
 
 import MainButton from '~/components/MainButton';
@@ -10,8 +13,8 @@ import MainButton from '~/components/MainButton';
 import { Container, Content, FirstForm, MiddleForm, LastForm } from './styles';
 
 const schema = Yup.object().shape({
-    name: Yup.string(),
-    cep: Yup.string(),
+    name: Yup.string().required(),
+    cep: Yup.string().required(),
     street: Yup.string().when('cep', (cep, field) =>
         cep ? field.required('Rua é obrigatória') : field
     ),
@@ -21,13 +24,33 @@ const schema = Yup.object().shape({
     state: Yup.string().when('city', (city, field) =>
         city ? field.required('Estado é obrigatório') : field
     ),
-    number: Yup.number(),
+    number: Yup.number().required(),
     complement: Yup.string(),
 });
 
-export default function EditRecipient() {
-    function handleSubmit(data) {
-        console.tron.log(data);
+export default function EditRecipient({ location }) {
+    const { recipient } = location.state;
+
+    async function handleSubmit(data) {
+        try {
+            const { name, cep, state, city, street, number, complement } = data;
+
+            await api.put(`/recipient/${recipient.id}/update`, {
+                name,
+                cep,
+                state,
+                city,
+                street,
+                number,
+                complement,
+            });
+        } catch (err) {
+            toast.error('Falha ao editar destinatário!');
+        } finally {
+            history.push('/recipient');
+
+            toast.success('Destinatário editado com sucesso!');
+        }
     }
 
     return (
@@ -49,46 +72,60 @@ export default function EditRecipient() {
             <Content>
                 <Form
                     schema={schema}
-                    onSubmit={() => handleSubmit()}
+                    onSubmit={handleSubmit}
                     id="form-recipient"
                 >
                     <FirstForm>
                         <strong>Nome</strong>
-                        <Input name="name" placeholder="John Doe" />
+                        <Input name="name" placeholder={recipient.name} />
                     </FirstForm>
                     <MiddleForm>
                         <div>
                             <strong>Rua</strong>
                             <Input
                                 name="street"
-                                placeholder="Rua Joaquim Pires"
+                                placeholder={recipient.street}
                             />
                         </div>
 
                         <div>
                             <strong>Número</strong>
-                            <Input name="number" placeholder="1068" />
+                            <Input
+                                name="number"
+                                placeholder={recipient.number}
+                            />
                         </div>
 
                         <div>
                             <strong>Complemento</strong>
-                            <Input name="complement" />
+                            <Input
+                                name="complement"
+                                placeholder={recipient.complement}
+                            />
                         </div>
                     </MiddleForm>
                     <LastForm>
                         <div>
                             <strong>Cidade</strong>
-                            <Input name="city" placeholder="Teresina" />
+                            <Input name="city" placeholder={recipient.city} />
                         </div>
 
                         <div>
                             <strong>Estado</strong>
-                            <Input name="state" placeholder="PI" />
+                            <Input name="state" placeholder={recipient.state} />
                         </div>
 
                         <div>
                             <strong>CEP</strong>
-                            <Input name="cep" placeholder="64.049-000" />
+                            <InputMask mask="99.999-999">
+                                {() => (
+                                    <Input
+                                        name="cep"
+                                        placeholder={recipient.cep}
+                                        required
+                                    />
+                                )}
+                            </InputMask>
                         </div>
                     </LastForm>
                 </Form>

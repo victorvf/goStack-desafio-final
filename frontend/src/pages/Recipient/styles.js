@@ -45,3 +45,24 @@ export const RecipientTable = styled.table`
         text-align: center;
     }
 `;
+
+export const Footer = styled.footer`
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+    margin-top: 50px;
+
+    button {
+        background: none;
+        color: #444;
+        border: 1px solid #333;
+        border-radius: 4px;
+        padding: 8px;
+
+        &:disabled {
+            cursor: default;
+            opacity: 0.3;
+        }
+    }
+`;

@@ -2,7 +2,9 @@ import React from 'react';
 import * as Yup from 'yup';
 import { Form, Input } from '@rocketseat/unform';
 import { MdDone, MdKeyboardArrowLeft } from 'react-icons/md';
+import { toast } from 'react-toastify';
 
+import api from '~/services/api';
 import history from '~/services/history';
 
 import MainButton from '~/components/MainButton';
@@ -12,14 +14,27 @@ import AvatarInput from '../AvatarInput';
 import { Container, Content } from './styles';
 
 const schema = Yup.object().shape({
-    name: Yup.string(),
-    email: Yup.string().email('Insira um e-mail válido'),
+    name: Yup.string().required(),
+    email: Yup.string().email('Insira um e-mail válido').required(),
     avatar_id: Yup.number(),
 });
 
-export default function EditDeliveryman() {
-    function handleSubmit(data) {
-        console.tron.log(data);
+export default function EditDeliveryman({ location }) {
+    const { deliveryman } = location.state;
+
+    async function handleSubmit({ name, email, avatar_id }) {
+        try {
+            await api.put(`/deliveryman/${deliveryman.id}/update`, {
+                name,
+                email,
+                avatar_id,
+            });
+        } catch (err) {
+            toast.error('Falha ao editar entregador!');
+        } finally {
+            history.push('/deliveryman');
+            toast.success('Entregador editado com sucesso!');
+        }
     }
 
     return (
@@ -44,16 +59,24 @@ export default function EditDeliveryman() {
             <Content>
                 <Form
                     schema={schema}
-                    onSubmit={() => handleSubmit()}
+                    onSubmit={handleSubmit}
                     id="form-deliveryman"
                 >
                     <AvatarInput name="avatar_id" />
 
                     <strong>Entregador</strong>
-                    <Input name="name" placeholder="John Doe" />
+                    <Input
+                        name="name"
+                        defaultValue={deliveryman.name}
+                        placeholder={deliveryman.name}
+                    />
 
                     <strong>E-mail</strong>
-                    <Input name="email" placeholder="Samsung J5" />
+                    <Input
+                        name="email"
+                        defaultValue={deliveryman.email}
+                        placeholder={deliveryman.email}
+                    />
                 </Form>
             </Content>
         </Container>

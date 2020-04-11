@@ -8,20 +8,24 @@ import history from '~/services/history';
 import Actions from '~/components/Actions';
 import MainButton from '~/components/MainButton';
 
-import { Search, SearchButton, RecipientTable } from './styles';
+import { Search, SearchButton, RecipientTable, Footer } from './styles';
 
 export default function Recipient() {
     const [recipients, setRecipients] = useState([]);
+    const [recipientQuery, setRecipientQuery] = useState('');
+    const [page, setPage] = useState(1);
 
     useEffect(() => {
         async function loadRecipients() {
-            const response = await api.get('/recipients');
+            const response = await api.get('/recipients', {
+                params: { recipientQuery, page },
+            });
 
             setRecipients(response.data);
         }
 
         loadRecipients();
-    }, []);
+    }, [recipientQuery, page]);
 
     async function handleRemove(id) {
         const alertRemove = window.confirm(
@@ -43,13 +47,28 @@ export default function Recipient() {
         }
     }
 
+    function handleEdit(recipient) {
+        history.push({
+            pathname: '/recipient/edit',
+            state: { recipient },
+        });
+    }
+
+    function handleQuery(event) {
+        setRecipientQuery(event.target.value);
+    }
+
     return (
         <>
             <h1>Gerenciando destinatários</h1>
             <Search>
                 <SearchButton>
                     <MdSearch size={20} color="#999" />
-                    <input type="text" placeholder="Buscar por destinatários" />
+                    <input
+                        type="text"
+                        placeholder="Buscar por destinatários"
+                        onChange={handleQuery}
+                    />
                 </SearchButton>
                 <MainButton onClick={() => history.push('/recipient/register')}>
                     <MdAdd size={20} color="#fff" />
@@ -72,7 +91,7 @@ export default function Recipient() {
                     </thead>
                     <tbody>
                         {recipients.map((recipient) => (
-                            <tr>
+                            <tr key={recipient.id}>
                                 <td>{`#${recipient.id}`}</td>
                                 <td>{recipient.name}</td>
                                 <td>{`${recipient.street}, ${recipient.city} - ${recipient.state}`}</td>
@@ -81,7 +100,7 @@ export default function Recipient() {
                                         <button
                                             type="button"
                                             onClick={() =>
-                                                history.push('/recipient/edit')
+                                                handleEdit(recipient)
                                             }
                                         >
                                             <MdEdit color="#4D85EE" />
@@ -103,6 +122,22 @@ export default function Recipient() {
                     </tbody>
                 </RecipientTable>
             )}
+
+            <Footer>
+                <button
+                    type="button"
+                    disabled={page === 1}
+                    onClick={() => setPage(page - 1)}
+                >
+                    Anterior
+                </button>
+
+                <span>{`página: ${page}`}</span>
+
+                <button type="button" onClick={() => setPage(page + 1)}>
+                    Próxima
+                </button>
+            </Footer>
         </>
     );
 }

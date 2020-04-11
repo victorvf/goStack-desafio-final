@@ -29,16 +29,22 @@ import {
     Date,
     Signature,
     Status,
+    Footer,
 } from './styles';
 
 export default function Deliveries() {
     const [deliveries, setDeliveries] = useState([]);
+    const [deliveryQuery, setDeliveryQuery] = useState('');
+    const [page, setPage] = useState(1);
+
     const [deliveryView, setDeliveryView] = useState({});
     const [view, setView] = useState(false);
 
     useEffect(() => {
         async function loadDeliveries() {
-            const response = await api.get('/orders');
+            const response = await api.get('/orders', {
+                params: { deliveryQuery, page },
+            });
 
             const data = response.data.map((delivery) => {
                 if (delivery.end_date) {
@@ -58,7 +64,7 @@ export default function Deliveries() {
         }
 
         loadDeliveries();
-    }, []);
+    }, [deliveryQuery, page]);
 
     function handleDeliveryView(data) {
         const { street, number, city, state, cep } = data.recipient;
@@ -111,6 +117,17 @@ export default function Deliveries() {
         }
     }
 
+    function handleEdit(delivery) {
+        history.push({
+            pathname: '/deliveries/edit',
+            state: { delivery },
+        });
+    }
+
+    function handleQuery(event) {
+        setDeliveryQuery(event.target.value);
+    }
+
     return (
         <>
             <div>
@@ -121,6 +138,7 @@ export default function Deliveries() {
                         <input
                             type="text"
                             placeholder="Buscar por encomendas"
+                            onChange={handleQuery}
                         />
                     </SearchButton>
 
@@ -176,9 +194,7 @@ export default function Deliveries() {
                                             <button
                                                 type="button"
                                                 onClick={() =>
-                                                    history.push(
-                                                        '/deliveries/edit'
-                                                    )
+                                                    handleEdit(delivery)
                                                 }
                                             >
                                                 <MdEdit color="#4D85EE" />
@@ -201,6 +217,22 @@ export default function Deliveries() {
                     </DeliveryTable>
                 )}
             </div>
+
+            <Footer>
+                <button
+                    type="button"
+                    disabled={page === 1}
+                    onClick={() => setPage(page - 1)}
+                >
+                    Anterior
+                </button>
+
+                <span>{`página: ${page}`}</span>
+
+                <button type="button" onClick={() => setPage(page + 1)}>
+                    Próxima
+                </button>
+            </Footer>
 
             <View view={view}>
                 <ViewContent>
