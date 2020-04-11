@@ -1,10 +1,18 @@
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
 
 import Recipient from '../../models/Recipient.js';
 
 class RecipientController {
     async index(request, response) {
+        const { recipientQuery = '', page = 1 } = request.query;
+
         const recipients = await Recipient.findAll({
+            where: {
+                name: { [Op.iLike]: `%${recipientQuery}%` },
+            },
+            limit: 4,
+            offset: (page - 1) * 4,
             attributes: [
                 'id',
                 'name',

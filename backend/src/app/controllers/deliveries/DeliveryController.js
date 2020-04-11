@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
 
 import Delivery from '../../models/Delivery';
 import Recipient from '../../models/Recipient';
@@ -10,21 +11,21 @@ import DeliveryAvailableMail from '../../jobs/DeliveryAvailableMail';
 
 class DeliveryController {
     async index(request, response) {
-        const { page = 1 } = request.query;
+        const { deliveryQuery = '', page = 1 } = request.query;
 
         const deliveries = await Delivery.findAll({
             where: {
-                canceled_at: null,
+                product: { [Op.iLike]: `%${deliveryQuery}%` },
             },
             attributes: [
                 'id',
                 'product',
                 'end_date',
                 'canceled_at',
-                'start_date'
+                'start_date',
             ],
-            limit: 20,
-            offset: (page - 1) * 20,
+            limit: 4,
+            offset: (page - 1) * 4,
             order: ['id'],
             include: [
                 {
@@ -43,7 +44,7 @@ class DeliveryController {
                         'city',
                         'street',
                         'number',
-                        'complement'
+                        'complement',
                     ],
                 },
             ],
@@ -211,7 +212,7 @@ class DeliveryController {
                 {
                     model: Deliveryman,
                     as: 'deliveryman',
-                    attributes: ['name', 'email'],
+                    attributes: ['id', 'name', 'email'],
                 },
             ],
         });
@@ -228,7 +229,7 @@ class DeliveryController {
         } else {
             await Notification.create({
                 content: `Check delivery updated - Code: ${delivery.id}`,
-                deliveryman: delivery.deliveryman_id,
+                deliveryman: delivery.deliveryman.id,
             });
         }
 

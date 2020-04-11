@@ -1,11 +1,19 @@
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
 
 import Deliveryman from '../../models/Deliveryman';
 import File from '../../models/File';
 
 class DeliverymanController {
     async index(request, response) {
+        const { deliverymanQuery = '', page = 1 } = request.query;
+
         const deliverymen = await Deliveryman.findAll({
+            where: {
+                name: { [Op.iLike]: `%${deliverymanQuery}%` },
+            },
+            limit: 4,
+            offset: (page - 1) * 4,
             order: ['id'],
             attributes: ['id', 'name', 'email'],
             include: {
@@ -102,12 +110,14 @@ class DeliverymanController {
             }
         }
 
-        const file = await File.findByPk(request.body.avatar_id);
+        if (request.body.avatar_id) {
+            const file = await File.findByPk(request.body.avatar_id);
 
-        if (!file) {
-            return response.status(404).json({
-                error: 'photo not found',
-            });
+            if (!file) {
+                return response.status(404).json({
+                    error: 'photo not found',
+                });
+            }
         }
 
         await deliveryman.update(request.body);

@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
 
 import DeliveryProblem from '../../models/Problem';
 import Delivery from '../../models/Delivery';
@@ -9,13 +10,26 @@ import CancelationMail from '../../jobs/CancelationMail';
 
 class ProblemDeliveryController {
     async index(request, response) {
+        const { problemQuery = '', page = 1} = request.query;
+
         const deliveriesProblem = await DeliveryProblem.findAll({
+            where: {
+                description: { [Op.iLike]: `%${problemQuery}%` },
+            },
+            limit: 4,
+            offset: (page - 1) * 4,
             attributes: ['id', 'description'],
             include: [
                 {
                     model: Delivery,
                     as: 'delivery',
-                    attributes: ['id', 'product'],
+                    attributes: [
+                        'id',
+                        'product',
+                        'end_date',
+                        'canceled_at',
+                        'start_date',
+                    ],
                 },
             ],
         });
