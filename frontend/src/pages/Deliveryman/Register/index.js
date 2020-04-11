@@ -2,7 +2,9 @@ import React from 'react';
 import * as Yup from 'yup';
 import { Form, Input } from '@rocketseat/unform';
 import { MdDone, MdKeyboardArrowLeft } from 'react-icons/md';
+import { toast } from 'react-toastify';
 
+import api from '~/services/api';
 import history from '~/services/history';
 
 import MainButton from '~/components/MainButton';
@@ -16,11 +18,23 @@ const schema = Yup.object().shape({
     email: Yup.string()
         .email('Insira um e-mail válido')
         .required('E-mail é obrigatório'),
+    avatar_id: Yup.string(),
 });
 
 export default function RegisterDeliveryman() {
-    function handleSubmit(data) {
-        console.tron.log(data);
+    async function handleSubmit({ name, email, avatar_id }) {
+        try {
+            await api.post('/deliveryman/create', {
+                name,
+                email,
+                avatar_id,
+            });
+        } catch (err) {
+            toast.error('Falha ao cadastrar entregador!');
+        } finally {
+            history.push('/deliveryman');
+            toast.success('Entregador cadastrado com sucesso!');
+        }
     }
 
     return (
@@ -45,7 +59,7 @@ export default function RegisterDeliveryman() {
             <Content>
                 <Form
                     schema={schema}
-                    onSubmit={() => handleSubmit()}
+                    onSubmit={handleSubmit}
                     id="form-deliveryman"
                 >
                     <AvatarInput name="avatar_id" />

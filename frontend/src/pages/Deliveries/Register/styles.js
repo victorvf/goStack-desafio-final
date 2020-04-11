@@ -42,12 +42,13 @@ export const FirstForm = styled.div`
         display: flex;
         flex-direction: column;
 
-        input {
+        select {
             padding: 0 10px;
             height: 45px;
             width: 405px;
             border: 1px solid #ddd;
             border-radius: 4px;
+            background: none;
         }
     }
 `;

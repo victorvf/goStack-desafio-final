@@ -2,7 +2,10 @@ import React from 'react';
 import * as Yup from 'yup';
 import { Form, Input } from '@rocketseat/unform';
 import { MdDone, MdKeyboardArrowLeft } from 'react-icons/md';
+import InputMask from 'react-input-mask';
+import { toast } from 'react-toastify';
 
+import api from '~/services/api';
 import history from '~/services/history';
 
 import MainButton from '~/components/MainButton';
@@ -15,13 +18,31 @@ const schema = Yup.object().shape({
     state: Yup.string('Estado inválido').required('Estado é obrigatório'),
     city: Yup.string('Cidade inválida').required('Cidade é obrigatória'),
     street: Yup.string('Rua inválida').required('Rua é obrigatória'),
-    number: Yup.number('Número inválido').required('Número é obrigatório'),
+    number: Yup.string('Número inválido').required('Número é obrigatório'),
     complement: Yup.string(),
 });
 
 export default function RegisterRecipient() {
-    function handleSubmit(data) {
-        console.tron.log(data);
+    async function handleSubmit(data) {
+        try {
+            const { name, cep, state, city, street, number, complement } = data;
+
+            await api.post('/recipient/create', {
+                name,
+                cep,
+                state,
+                city,
+                street,
+                number,
+                complement,
+            });
+        } catch (err) {
+            toast.error('Falha ao cadastrar destinatário!');
+        } finally {
+            history.push('/recipient');
+
+            toast.success('Destinatário cadastrado com sucesso!');
+        }
     }
 
     return (
@@ -43,7 +64,7 @@ export default function RegisterRecipient() {
             <Content>
                 <Form
                     schema={schema}
-                    onSubmit={() => handleSubmit()}
+                    onSubmit={handleSubmit}
                     id="form-recipient"
                 >
                     <FirstForm>
@@ -82,7 +103,15 @@ export default function RegisterRecipient() {
 
                         <div>
                             <strong>CEP</strong>
-                            <Input name="cep" placeholder="00.000-000" />
+                            <InputMask mask="99.999-999">
+                                {() => (
+                                    <Input
+                                        name="cep"
+                                        placeholder="00.000-000"
+                                        required
+                                    />
+                                )}
+                            </InputMask>
                         </div>
                     </LastForm>
                 </Form>
