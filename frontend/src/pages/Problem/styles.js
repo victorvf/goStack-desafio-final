@@ -27,14 +27,23 @@ export const ProblemTable = styled.table`
 
     thead th {
         color: #444;
-        padding-left: 30px;
         text-align: left;
+        padding: 0 15px;
+
+        &:last-child {
+            text-align: right;
+        }
     }
 
     tbody td {
         background: #fff;
         border-radius: 4px;
-        padding-left: 30px;
+        padding-left: 15px;
+        padding-right: 25px;
+
+        &:last-child {
+            text-align: right;
+        }
     }
 
     tbody tr {

@@ -96,7 +96,16 @@ export default function Deliveryman() {
                         {deliverymans.map((deliveryman) => (
                             <tr key={deliveryman.id}>
                                 <td>{`#${deliveryman.id}`}</td>
-                                <td>PA</td>
+                                <td>
+                                    <img
+                                        src={
+                                            deliveryman.avatar
+                                                ? deliveryman.avatar.url
+                                                : `https://api.adorable.io/avatars/50/${deliveryman.name}.png`
+                                        }
+                                        alt="avatar"
+                                    />
+                                </td>
                                 <td>{deliveryman.name}</td>
                                 <td>{deliveryman.email}</td>
                                 <td>

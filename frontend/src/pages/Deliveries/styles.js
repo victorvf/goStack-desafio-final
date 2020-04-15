@@ -33,17 +33,28 @@ export const DeliveryTable = styled.table`
 
     thead th {
         color: #444;
-        text-align: center;
+        text-align: left;
+        padding: 0 15px;
+
+        &:last-child {
+            text-align: right;
+        }
     }
 
     tbody td {
         background: #fff;
         border-radius: 4px;
+        padding-left: 15px;
+        padding-right: 25px;
+
+        &:last-child {
+            text-align: right;
+        }
     }
 
     tbody tr {
         height: 50px;
-        text-align: center;
+        text-align: left;
     }
 `;
 
@@ -172,8 +183,8 @@ export const Signature = styled.div`
     flex-direction: column;
 
     img {
-        width: 235px;
-        height: 40px;
+        width: 300px;
+        height: 60px;
         margin-top: 25px;
         align-self: center;
     }
@@ -197,5 +208,18 @@ export const Footer = styled.footer`
             cursor: default;
             opacity: 0.3;
         }
+    }
+`;
+
+export const Deliveryman = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    img {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        margin-right: 8px;
     }
 `;
