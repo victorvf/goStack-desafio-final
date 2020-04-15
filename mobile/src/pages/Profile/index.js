@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useIsFocused } from '@react-navigation/native';
+import PropTypes from 'prop-types';
 
 import {
     Container,
@@ -49,9 +50,16 @@ export default function Profile() {
     );
 }
 
+function IconTab({ color, size }) {
+    return <Icon name="person" size={size} color={color} />;
+}
+
 Profile.navigationOptions = {
     tabBarLabel: 'Meu perfil',
-    tabBarIcon: ({ color, size }) => (
-        <Icon name="person" size={size} color={color} />
-    ),
+    tabBarIcon: IconTab,
+};
+
+IconTab.propTypes = {
+    color: PropTypes.string.isRequired,
+    size: PropTypes.number.isRequired,
 };

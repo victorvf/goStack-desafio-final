@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, StatusBar } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
+import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {
@@ -101,4 +102,10 @@ export default function DetailDelivery({ navigation: { navigate } }) {
 DetailDelivery.navigationOptions = {
     headerTitle: 'Detalhes da encomenda',
     headerTitleAlign: 'center',
+};
+
+DetailDelivery.propTypes = {
+    navigation: PropTypes.shape({
+        navigate: PropTypes.func,
+    }).isRequired,
 };

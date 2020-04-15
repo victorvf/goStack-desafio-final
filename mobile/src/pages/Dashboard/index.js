@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useIsFocused } from '@react-navigation/native';
+import PropTypes from 'prop-types';
 
 import Delivery from '~/components/Delivery';
 
@@ -73,4 +74,8 @@ export default function Dashboard({ navigation }) {
 
 Dashboard.navigationOptions = {
     headerShown: false,
+};
+
+Dashboard.propTypes = {
+    navigation: PropTypes.shape().isRequired,
 };

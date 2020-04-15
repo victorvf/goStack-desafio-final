@@ -1,5 +1,6 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import PropTypes from 'prop-types';
 
 import {
     Container,
@@ -60,3 +61,10 @@ export default function Delivery({ data, navigation: { navigate } }) {
         </Container>
     );
 }
+
+Delivery.propTypes = {
+    navigation: PropTypes.shape({
+        navigate: PropTypes.func,
+    }).isRequired,
+    data: PropTypes.number.isRequired,
+};

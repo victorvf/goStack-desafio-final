@@ -3,6 +3,7 @@ import * as Yup from 'yup';
 import { Form, Input, Select } from '@rocketseat/unform';
 import { MdDone, MdKeyboardArrowLeft } from 'react-icons/md';
 import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 
 import api from '~/services/api';
 import history from '~/services/history';
@@ -127,3 +128,11 @@ export default function EditDelivery({ location }) {
         </Container>
     );
 }
+
+EditDelivery.propTypes = {
+    location: PropTypes.shape({
+        state: PropTypes.shape({
+            delivery: PropTypes.object,
+        }),
+    }).isRequired,
+};

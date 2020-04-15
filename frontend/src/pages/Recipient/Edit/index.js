@@ -4,6 +4,7 @@ import { Form, Input } from '@rocketseat/unform';
 import { MdDone, MdKeyboardArrowLeft } from 'react-icons/md';
 import InputMask from 'react-input-mask';
 import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 
 import api from '~/services/api';
 import history from '~/services/history';
@@ -133,3 +134,11 @@ export default function EditRecipient({ location }) {
         </Container>
     );
 }
+
+EditRecipient.propTypes = {
+    location: PropTypes.shape({
+        state: PropTypes.shape({
+            recipient: PropTypes.object,
+        }),
+    }).isRequired,
+};
