@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useIsFocused } from '@react-navigation/native';
 
 import {
     Container,
@@ -12,6 +14,15 @@ import {
 } from './styles';
 
 export default function Profile() {
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        if (isFocused) {
+            StatusBar.setBackgroundColor('#fff');
+            StatusBar.setBarStyle('dark-content');
+        }
+    }, [isFocused]);
+
     return (
         <Container>
             <Avatar

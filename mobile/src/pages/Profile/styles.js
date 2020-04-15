@@ -4,6 +4,7 @@ import { RectButton } from 'react-native-gesture-handler';
 export const Container = styled.View`
     flex: 1;
     padding: 0 30px;
+    background: #fff;
 
     align-items: center;
     justify-content: center;
