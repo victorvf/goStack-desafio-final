@@ -1,8 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { StatusBar } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useIsFocused } from '@react-navigation/native';
 import PropTypes from 'prop-types';
+import { format, parseISO } from 'date-fns';
+
+import { signOut } from '~/store/modules/auth/actions';
 
 import {
     Container,
@@ -15,7 +19,14 @@ import {
 } from './styles';
 
 export default function Profile() {
+    const dispatch = useDispatch();
     const isFocused = useIsFocused();
+    const deliveryman = useSelector((state) => state.auth.profile);
+
+    const dateFormatted = useMemo(
+        () => format(new Date(parseISO(deliveryman.created_at)), 'dd/MM/yyyy'),
+        [deliveryman.created_at]
+    );
 
     useEffect(() => {
         if (isFocused) {
@@ -24,26 +35,32 @@ export default function Profile() {
         }
     }, [isFocused]);
 
+    function handleSignOut() {
+        dispatch(signOut());
+    }
+
     return (
         <Container>
             <Avatar
                 source={{
-                    uri: 'https://api.adorable.io/avatar/120/rochelly.png',
+                    uri: deliveryman.avatar
+                        ? `${deliveryman.avatar.url}`
+                        : `https://api.adorable.io/avatar/120/${deliveryman.name}.png`,
                 }}
             />
 
             <Content>
                 <Span>Nome completo</Span>
-                <Strong>Gaspar Antunes</Strong>
+                <Strong>{deliveryman.name}</Strong>
 
                 <Span>Email</Span>
-                <Strong>example@rocketseat.com.br</Strong>
+                <Strong>{deliveryman.email}</Strong>
 
                 <Span>Data de cadastro</Span>
-                <Strong>10/01/2020</Strong>
+                <Strong>{dateFormatted}</Strong>
             </Content>
 
-            <Button onPress={() => {}}>
+            <Button onPress={handleSignOut}>
                 <TextButton>Sair</TextButton>
             </Button>
         </Container>
