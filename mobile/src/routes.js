@@ -1,5 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
+import { useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -19,7 +20,7 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default function Routes() {
-    const signed = true;
+    const signed = useSelector((state) => state.auth.signed);
 
     return (
         <NavigationContainer>
