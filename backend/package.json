@@ -1,6 +1,6 @@
 {
   "name": "final_challenge",
-  "author": "Victor Vitória Fontenele",
+  "author": "Victor Vitória Fontenele @victorvf",
   "description": "Desafio final do bootcamp da RocketSeat",
   "license": "MIT",
   "main": "src/server.js",
