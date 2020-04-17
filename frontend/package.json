@@ -1,5 +1,8 @@
 {
   "name": "frontend",
+  "author": "Victor Vitória Fontenele @victorvf",
+  "description": "Desafio final do bootcamp da RocketSeat",
+  "license": "MIT",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

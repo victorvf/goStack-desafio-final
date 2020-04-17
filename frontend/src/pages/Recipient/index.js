@@ -35,7 +35,7 @@ export default function Recipient() {
         if (!alertRemove) return;
 
         try {
-            api.delete(`/recipient/${id}/delete`);
+            await api.delete(`/recipient/${id}/delete`);
 
             const newRecipients = recipients.filter((r) => r.id !== id);
 
