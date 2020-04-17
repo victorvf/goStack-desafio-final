@@ -32,17 +32,34 @@ export const DeliverymanTable = styled.table`
 
     thead th {
         color: #444;
-        text-align: center;
+        text-align: left;
+        padding: 0 15px;
+
+        &:last-child {
+            text-align: right;
+        }
     }
 
     tbody td {
         background: #fff;
         border-radius: 4px;
+        padding-left: 15px;
+        padding-right: 25px;
+
+        &:last-child {
+            text-align: right;
+        }
+
+        img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+        }
     }
 
     tbody tr {
         height: 50px;
-        text-align: center;
+        text-align: left;
     }
 `;
 

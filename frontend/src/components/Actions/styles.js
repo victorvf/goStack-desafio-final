@@ -14,8 +14,7 @@ export const MoreButton = styled.button`
 export const ActionsList = styled.div`
     position: absolute;
     width: ${(props) => (props.problem ? '200px' : '150px')};
-    left: ${(props) =>
-        props.problem ? 'calc(50% - 239px)' : 'calc(50% - 100px)'};
+    right: ${(props) => (props.problem ? '-54px' : '-40px')};
     top: calc(100% + 4px);
     background: #fff;
     box-shadow: 1px 1px 3px #333;

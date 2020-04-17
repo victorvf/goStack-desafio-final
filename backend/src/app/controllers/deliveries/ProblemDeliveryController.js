@@ -44,13 +44,13 @@ class ProblemDeliveryController {
     }
 
     async show(request, response) {
-        const { delivery_id } = request.body;
+        const delivery_id = request.params.id;
 
         const problems = await DeliveryProblem.findAll({
             where: {
                 delivery_id,
             },
-            attributes: ['id', 'description'],
+            attributes: ['id', 'description', 'created_at'],
             include: [
                 {
                     model: Delivery,
@@ -72,7 +72,6 @@ class ProblemDeliveryController {
     async store(request, response) {
         const schema = Yup.object().shape({
             description: Yup.string().required(),
-            delivery_id: Yup.number().required(),
         });
 
         if (!(await schema.isValid(request.body))) {
@@ -81,7 +80,10 @@ class ProblemDeliveryController {
             });
         }
 
-        const delivery = await Delivery.findByPk(request.body.delivery_id);
+        const delivery_id = request.params.id;
+        const description = request.body.description;
+
+        const delivery = await Delivery.findByPk(delivery_id);
 
         if (!delivery) {
             return response.status(404).json({
@@ -89,25 +91,12 @@ class ProblemDeliveryController {
             });
         }
 
-        const deliveryman = await Deliveryman.findByPk(
-            request.params.id
-        );
-
-        if (!deliveryman) {
-            return response.status(404).json({
-                error: 'deliveryman not found',
-            });
-        }
-
-        const { id, description, delivery_id } = await DeliveryProblem.create(
-            request.body
-        );
-
-        return response.json({
-            id,
+        const problem = await DeliveryProblem.create({
             description,
             delivery_id,
         });
+
+        return response.json({problem});
     }
 
     async update(request, response) {

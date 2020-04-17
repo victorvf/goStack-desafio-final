@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 import { Op } from 'sequelize';
 
+import File from '../../models/File';
 import Delivery from '../../models/Delivery';
 import Recipient from '../../models/Recipient';
 import Deliveryman from '../../models/Deliveryman';
@@ -32,6 +33,13 @@ class DeliveryController {
                     model: Deliveryman,
                     as: 'deliveryman',
                     attributes: ['id', 'name'],
+                    include: [
+                        {
+                            model: File,
+                            as: 'avatar',
+                            attributes: ['id', 'name', 'path', 'url'],
+                        }
+                    ]
                 },
                 {
                     model: Recipient,
@@ -46,6 +54,11 @@ class DeliveryController {
                         'number',
                         'complement',
                     ],
+                },
+                {
+                    model: File,
+                    as: 'signature',
+                    attributes: ['id', 'name', 'path', 'url'],
                 },
             ],
         });

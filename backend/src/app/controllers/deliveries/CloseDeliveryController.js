@@ -2,13 +2,11 @@ import * as Yup from 'yup';
 import { parseISO, isBefore, isAfter, startOfHour } from 'date-fns';
 
 import Delivery from '../../models/Delivery';
-import Deliveryman from '../../models/Deliveryman';
 import File from '../../models/File';
 
 class CloseDeliveryController {
     async update(request, response) {
         const schema = Yup.object().shape({
-            order_id: Yup.number().required(),
             end_date: Yup.date().required(),
             signature_id: Yup.number().required(),
         });
@@ -19,17 +17,9 @@ class CloseDeliveryController {
             });
         }
 
-        const deliveryman = await Deliveryman.findByPk(request.params.id);
-
-        if (!deliveryman) {
-            return response.status(404).json({
-                error: 'deliveryman does not available',
-            });
-        }
-
         const delivery = await Delivery.findOne({
             where: {
-                id: request.body.order_id,
+                id: request.params.id,
                 end_date: null,
                 canceled_at: null,
             },

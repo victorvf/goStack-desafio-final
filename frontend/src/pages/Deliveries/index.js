@@ -17,7 +17,6 @@ import history from '~/services/history';
 import Actions from '~/components/Actions';
 import MainButton from '~/components/MainButton';
 
-import signature from '~/assets/signature.png';
 import {
     Search,
     SearchButton,
@@ -30,6 +29,7 @@ import {
     Signature,
     Status,
     Footer,
+    Deliveryman,
 } from './styles';
 
 export default function Deliveries() {
@@ -70,6 +70,12 @@ export default function Deliveries() {
         const { street, number, city, state, cep } = data.recipient;
         const { start_date, end_date } = data;
 
+        let url = null;
+
+        if (data.signature) {
+            url = data.signature.url;
+        }
+
         const startDateFormatted = start_date
             ? format(parseISO(start_date), 'dd/MM/yyyy - HH:mm')
             : 'data indisponível';
@@ -86,6 +92,7 @@ export default function Deliveries() {
             cep,
             start_date: startDateFormatted,
             end_date: endDateFormatted,
+            url,
         });
 
         setView(!view);
@@ -172,7 +179,22 @@ export default function Deliveries() {
                                 <tr key={delivery.id}>
                                     <td>{`#${delivery.id}`}</td>
                                     <td>{delivery.recipient.name}</td>
-                                    <td>{delivery.deliveryman.name}</td>
+                                    <td>
+                                        <Deliveryman>
+                                            <img
+                                                src={
+                                                    delivery.deliveryman.avatar
+                                                        ? delivery.deliveryman
+                                                              .avatar.url
+                                                        : `https://api.adorable.io/avatars/50/${delivery.deliveryman.name}.png`
+                                                }
+                                                alt="avatar"
+                                            />
+                                            <span>
+                                                {delivery.deliveryman.name}
+                                            </span>
+                                        </Deliveryman>
+                                    </td>
                                     <td>{delivery.recipient.city}</td>
                                     <td>{delivery.recipient.state}</td>
                                     <td>
@@ -263,7 +285,11 @@ export default function Deliveries() {
 
                     <Signature>
                         <strong>Assinatura do destinatário:</strong>
-                        <img src={signature} alt="signature" />
+                        {deliveryView.url ? (
+                            <img src={deliveryView.url} alt="signature" />
+                        ) : (
+                            <span>Não possui assinatura</span>
+                        )}
                     </Signature>
                 </ViewContent>
             </View>
