@@ -30,3 +30,21 @@ export const Button = styled(RectButton)`
 export const TextButton = styled.Text`
     color: #fff;
 `;
+
+export const CaptureButton = styled(RectButton)`
+    background: #9f9f9f;
+    padding: 20px;
+    border-radius: 45px;
+    align-self: center;
+    margin-top: -120px;
+    margin-bottom: 40px;
+
+    display: ${(props) => (props.visible ? 'flex' : 'none')};
+`;
+
+export const ImageCaptured = styled.Image`
+    flex: 1;
+    border-radius: 4px;
+
+    display: ${(props) => (props.visible ? 'flex' : 'none')};
+`;

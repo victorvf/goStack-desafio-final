@@ -57,5 +57,20 @@
     <array>
         <string>MaterialIcons.ttf</string>
     </array>
+    <!-- Required with iOS 10 and higher -->
+    <key>NSCameraUsageDescription</key>
+    <string>I will use your camera!</string>
+
+    <!-- Required with iOS 11 and higher: include this only if you are planning to use the camera roll -->
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>I will see your photos!</string>
+
+    <!-- Include this only if you are planning to use the camera roll -->
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>I will see your photos!</string>
+
+    <!-- Include this only if you are planning to use the microphone for video recording -->
+    <key>NSMicrophoneUsageDescription</key>
+    <string>I will hear your voice!</string>
 </dict>
 </plist>
