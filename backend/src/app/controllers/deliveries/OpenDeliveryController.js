@@ -11,6 +11,7 @@ import {
 
 import Delivery from '../../models/Delivery';
 import Deliveryman from '../../models/Deliveryman';
+import Recipient from '../../models/Recipient';
 
 class OpenDeliveryController {
     async index(request, response) {
@@ -28,6 +29,7 @@ class OpenDeliveryController {
                 canceled_at: null,
                 deliveryman_id: deliveryman.id,
             },
+            order: ['id'],
             attributes: [
                 'id',
                 'product',
@@ -35,6 +37,19 @@ class OpenDeliveryController {
                 'start_date',
                 'end_date',
             ],
+            include: [{
+                model: Recipient,
+                as: 'recipient',
+                attributes: [
+                    'id',
+                    'name',
+                    'cep',
+                    'city',
+                    'state',
+                    'street',
+                    'number',
+                ],
+            }],
         });
 
         if (!deliveries) {

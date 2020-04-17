@@ -26,18 +26,21 @@ routes.post('/session', SessionController.store);
 routes.get('/notifications/:id', NotificationController.index);
 routes.put('/notifications/:id/update', NotificationController.update);
 
+routes.get('/deliveryman/:id', DeliverymanController.show);
+
 routes.get('/deliveryman/:id/deliveries', OpenDeliveryController.index);
 routes.put('/deliveryman/:id/deliveries', OpenDeliveryController.update);
 
 routes.post('/file/create', upload.single('file'), FileController.store);
-
-routes.put('/deliveryman/:id/close-delivery', CloseDeliveryController.update);
 
 routes.get(
     '/deliveryman/:id/orders-delivered',
     CompletedDeliveriesController.index
 );
 
+routes.put('/delivery/:id/close-delivery', CloseDeliveryController.update);
+
+routes.get('/delivery/:id/problems', ProblemDeliveryController.show);
 routes.post('/delivery/:id/create-problem', ProblemDeliveryController.store);
 
 // authentication
@@ -59,7 +62,6 @@ routes.put('/recipient/:id/update', RecipientController.update);
 routes.delete('/recipient/:id/delete', RecipientController.delete);
 
 routes.get('/deliverymen', DeliverymanController.index);
-routes.get('/deliveryman/:id', DeliverymanController.show);
 routes.post('/deliveryman/create', DeliverymanController.store);
 routes.put('/deliveryman/:id/update', DeliverymanController.update);
 routes.delete('/deliveryman/:id/delete', DeliverymanController.delete);
@@ -71,7 +73,6 @@ routes.put('/order/:id/update', DeliveryController.update);
 routes.delete('/order/:id/delete', DeliveryController.delete);
 
 routes.get('/delivery/problems', ProblemDeliveryController.index);
-routes.get('/delivery/:id/problems', ProblemDeliveryController.show);
 routes.put('/delivery/:id/update-problem', ProblemDeliveryController.update);
 routes.delete(
     '/delivery/:id/cancel-delivery',
