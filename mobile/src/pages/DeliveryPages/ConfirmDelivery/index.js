@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Alert, Image } from 'react-native';
+import { Alert, TouchableOpacity } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import PropTypes from 'prop-types';
 
 import api from '~/services/api';
 
@@ -115,7 +116,21 @@ export default function ConfirmDelivery({ navigation: { navigate }, route }) {
     );
 }
 
-ConfirmDelivery.navigationOptions = {
+ConfirmDelivery.navigationOptions = ({ navigation: { goBack } }) => ({
     headerTitle: 'Confirmar entrega',
     headerTitleAlign: 'center',
+    headerLeft: () => (
+        <TouchableOpacity onPress={() => goBack()}>
+            <Icon name="chevron-left" size={23} color="#fff" />
+        </TouchableOpacity>
+    ),
+});
+
+ConfirmDelivery.propTypes = {
+    navigation: PropTypes.shape({
+        navigate: PropTypes.func,
+    }).isRequired,
+    route: PropTypes.shape({
+        params: PropTypes.object,
+    }).isRequired,
 };

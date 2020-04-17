@@ -38,7 +38,7 @@ export const Span = styled.Text`
     font-size: 15px;
 `;
 
-export const MiddleText = styled.Text`
+export const MiddleText = styled.View`
     margin: 15px 0;
 `;
 

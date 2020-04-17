@@ -4,7 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useIsFocused } from '@react-navigation/native';
 import PropTypes from 'prop-types';
-import { format, parseISO } from 'date-fns';
+
+import dateFormat from '~/utils/dateFormat';
 
 import { signOut } from '~/store/modules/auth/actions';
 
@@ -23,10 +24,9 @@ export default function Profile() {
     const isFocused = useIsFocused();
     const deliveryman = useSelector((state) => state.auth.profile);
 
-    const dateFormatted = useMemo(
-        () => format(new Date(parseISO(deliveryman.created_at)), 'dd/MM/yyyy'),
-        [deliveryman.created_at]
-    );
+    const dateFormatted = useMemo(() => dateFormat(deliveryman.created_at), [
+        deliveryman.created_at,
+    ]);
 
     useEffect(() => {
         if (isFocused) {

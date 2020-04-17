@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { StatusBar, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useIsFocused } from '@react-navigation/native';
 import PropTypes from 'prop-types';
+
+import api from '~/services/api';
 
 import { signOut } from '~/store/modules/auth/actions';
 
@@ -24,19 +26,46 @@ import {
     DeliveryList,
 } from './styles';
 
-const data = [1, 2, 3, 4];
-
 export default function Dashboard({ navigation }) {
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
     const deliveryman = useSelector((state) => state.auth.profile);
 
+    const [pending, setPending] = useState(true);
+    const [delivered, setDelivered] = useState(false);
+
+    const [deliveries, setDeliveries] = useState([]);
+
+    async function loadDeliveriesDelivered() {
+        const response = await api.get(
+            `/deliveryman/${deliveryman.id}/orders-delivered`
+        );
+
+        setDeliveries(response.data);
+
+        setPending(!pending);
+        setDelivered(!delivered);
+    }
+
+    const loadDeliveriesPending = useCallback(async () => {
+        const response = await api.get(
+            `/deliveryman/${deliveryman.id}/deliveries`
+        );
+
+        setDeliveries(response.data);
+
+        setPending(true);
+        setDelivered(false);
+    }, [deliveryman.id]);
+
     useEffect(() => {
         if (isFocused) {
             StatusBar.setBackgroundColor('#fff');
             StatusBar.setBarStyle('dark-content');
+
+            loadDeliveriesPending();
         }
-    }, [isFocused]);
+    }, [isFocused, loadDeliveriesPending]);
 
     function handleSignOut() {
         dispatch(signOut());
@@ -65,17 +94,17 @@ export default function Dashboard({ navigation }) {
             <Actions>
                 <Strong>Entregas</Strong>
                 <ActionButtons>
-                    <Button>
-                        <TextButton active>Pendentes</TextButton>
+                    <Button onPress={() => loadDeliveriesPending()}>
+                        <TextButton active={pending}>Pendentes</TextButton>
                     </Button>
-                    <Button>
-                        <TextButton>Entregues</TextButton>
+                    <Button onPress={() => loadDeliveriesDelivered()}>
+                        <TextButton active={delivered}>Entregues</TextButton>
                     </Button>
                 </ActionButtons>
             </Actions>
             <DeliveryList
-                data={data}
-                keyExtractor={(item) => String(item)}
+                data={deliveries}
+                keyExtractor={(item) => String(item.id)}
                 renderItem={({ item }) => (
                     <Delivery data={item} navigation={navigation} />
                 )}
@@ -89,5 +118,7 @@ Dashboard.navigationOptions = {
 };
 
 Dashboard.propTypes = {
-    navigation: PropTypes.shape().isRequired,
+    navigation: PropTypes.shape({
+        navigate: PropTypes.func,
+    }).isRequired,
 };

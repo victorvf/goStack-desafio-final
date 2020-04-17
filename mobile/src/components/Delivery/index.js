@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import PropTypes from 'prop-types';
+
+import dateFormat from '~/utils/dateFormat';
 
 import {
     Container,
@@ -21,21 +23,25 @@ import {
 } from './styles';
 
 export default function Delivery({ data, navigation: { navigate } }) {
+    const startDateFormatted = useMemo(() => {
+        return data.start_date ? dateFormat(data.start_date) : null;
+    }, [data.start_date]);
+
     function handleNavigation() {
-        navigate('DetailDelivery');
+        navigate('DetailDelivery', { data });
     }
 
     return (
         <Container>
             <Header>
                 <Icon name="local-shipping" size={20} color="#7D40E7" />
-                <Title>Encomenda 01</Title>
+                <Title>Encomenda {data.id}</Title>
             </Header>
 
             <ProgressContainer>
                 <Status active />
-                <Status />
-                <Status />
+                <Status active={startDateFormatted} />
+                <Status active={!!data.end_date} />
             </ProgressContainer>
             <ProgressName>
                 <StatusName>Aguardando Retirada</StatusName>
@@ -46,12 +52,14 @@ export default function Delivery({ data, navigation: { navigate } }) {
             <Content>
                 <Infos>
                     <Date>
-                        <Span>Data</Span>
-                        <DeliveryText>14/01/2020</DeliveryText>
+                        <Span>Data de retirada</Span>
+                        <DeliveryText>
+                            {data.start_date ? startDateFormatted : '--/--/--'}
+                        </DeliveryText>
                     </Date>
                     <City>
                         <Span>Cidade</Span>
-                        <DeliveryText>Diadema</DeliveryText>
+                        <DeliveryText>{data.recipient.city}</DeliveryText>
                     </City>
                     <Button onPress={handleNavigation}>
                         <TextButton>Ver detalhes</TextButton>
@@ -66,5 +74,12 @@ Delivery.propTypes = {
     navigation: PropTypes.shape({
         navigate: PropTypes.func,
     }).isRequired,
-    data: PropTypes.number.isRequired,
+    data: PropTypes.shape({
+        id: PropTypes.number,
+        product: PropTypes.string,
+        canceled_at: PropTypes.string,
+        start_date: PropTypes.string,
+        end_date: PropTypes.string,
+        recipient: PropTypes.object,
+    }).isRequired,
 };
