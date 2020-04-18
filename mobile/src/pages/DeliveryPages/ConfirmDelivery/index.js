@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, TouchableOpacity } from 'react-native';
+import { Alert, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import PropTypes from 'prop-types';
@@ -18,12 +18,16 @@ import {
 
 export default function ConfirmDelivery({ navigation: { navigate }, route }) {
     const { id } = route.params;
+    const [loading, setLoading] = useState(false);
+
     const [cameraCurrent, setCameraCurrent] = useState();
     const [photo, setPhoto] = useState(0);
     const [visible, setVisible] = useState(false);
 
     async function handleTakeSignature() {
         try {
+            setLoading(true);
+
             const options = {
                 quality: 0.5,
                 base64: false,
@@ -35,13 +39,19 @@ export default function ConfirmDelivery({ navigation: { navigate }, route }) {
 
             setPhoto(data);
             setVisible(!visible);
+
+            setLoading(false);
         } catch (err) {
+            setLoading(false);
+
             Alert.alert('Falha', 'Erro ao capturar foto!');
         }
     }
 
     async function handleSubmit() {
         try {
+            setLoading(true);
+
             const data = new FormData();
 
             data.append('file', {
@@ -53,9 +63,11 @@ export default function ConfirmDelivery({ navigation: { navigate }, route }) {
             const response = await api.post(`/file/create`, data);
 
             await api.put(`/delivery/${id}/close-delivery`, {
-                end_date: '2020-04-17T14:00:00',
+                end_date: new Date(),
                 signature_id: response.data.id,
             });
+
+            setLoading(false);
 
             Alert.alert(
                 'Sucesso',
@@ -64,9 +76,11 @@ export default function ConfirmDelivery({ navigation: { navigate }, route }) {
                 { cancelable: false }
             );
         } catch (err) {
+            setLoading(false);
+
             Alert.alert(
                 'Error',
-                'Erro ao capturar assinatura, tente novamente!'
+                'Verifique se vocês está confirmando entrega no horario certo!'
             );
         }
     }
@@ -105,11 +119,19 @@ export default function ConfirmDelivery({ navigation: { navigate }, route }) {
                 </Input>
 
                 <CaptureButton visible={!visible} onPress={handleTakeSignature}>
-                    <Icon name="photo-camera" size={30} color="#fff" />
+                    {loading ? (
+                        <ActivityIndicator color="#fff" size={30} />
+                    ) : (
+                        <Icon name="photo-camera" size={30} color="#fff" />
+                    )}
                 </CaptureButton>
 
                 <Button onPress={handleSubmit}>
-                    <TextButton>Enviar</TextButton>
+                    {loading ? (
+                        <ActivityIndicator color="#fff" size={20} />
+                    ) : (
+                        <TextButton>Enviar</TextButton>
+                    )}
                 </Button>
             </Container>
         </>

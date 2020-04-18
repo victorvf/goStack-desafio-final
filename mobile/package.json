@@ -1,5 +1,8 @@
 {
   "name": "mobile",
+  "author": "Victor Vitória Fontenele @victorvf",
+  "description": "Desafio final do bootcamp da RocketSeat",
+  "license": "MIT",
   "version": "0.0.1",
   "private": true,
   "scripts": {

@@ -23,36 +23,34 @@ export default function EditDelivery({ location }) {
     const [recipients, setRecipients] = useState([]);
     const [deliverymans, setDeliverymans] = useState([]);
 
+    async function loadRecipients() {
+        const response = await api.get('/recipients');
+
+        const data = response.data.map((recipient) => {
+            const { id } = recipient;
+            const title = recipient.name;
+
+            return { id, title };
+        });
+
+        setRecipients(data);
+    }
+
+    async function loadDeliverymen() {
+        const response = await api.get('/deliverymen');
+
+        const data = response.data.map((deliveryman) => {
+            const { id } = deliveryman;
+            const title = deliveryman.name;
+
+            return { id, title };
+        });
+
+        setDeliverymans(data);
+    }
+
     useEffect(() => {
-        async function loadRecipients() {
-            const response = await api.get('/recipients');
-
-            const data = response.data.map((recipient) => {
-                const { id } = recipient;
-                const title = recipient.name;
-
-                return { id, title };
-            });
-
-            setRecipients(data);
-        }
-
         loadRecipients();
-    }, []);
-
-    useEffect(() => {
-        async function loadDeliverymen() {
-            const response = await api.get('/deliverymen');
-
-            const data = response.data.map((deliveryman) => {
-                const { id } = deliveryman;
-                const title = deliveryman.name;
-
-                return { id, title };
-            });
-
-            setDeliverymans(data);
-        }
 
         loadDeliverymen();
     }, []);

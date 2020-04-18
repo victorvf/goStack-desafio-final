@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -10,9 +10,14 @@ import { Container, Background, Input, Button, TextButton } from './styles';
 export default function ReportProblem({ navigation: { goBack }, route }) {
     const { id } = route.params;
     const [description, setDescription] = useState('');
+    const [loading, setLoading] = useState(false);
 
     async function handleSubmit() {
+        setLoading(true);
+
         await api.post(`/delivery/${id}/create-problem`, { description });
+
+        setLoading(false);
 
         goBack();
     }
@@ -32,7 +37,11 @@ export default function ReportProblem({ navigation: { goBack }, route }) {
                     onSubmitEditing={handleSubmit}
                 />
                 <Button onPress={handleSubmit}>
-                    <TextButton>Enviar</TextButton>
+                    {loading ? (
+                        <ActivityIndicator color="#fff" size={20} />
+                    ) : (
+                        <TextButton>Enviar</TextButton>
+                    )}
                 </Button>
             </Container>
         </>
