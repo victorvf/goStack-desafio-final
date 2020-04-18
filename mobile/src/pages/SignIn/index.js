@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { StatusBar } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { StatusBar, ActivityIndicator } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
 
 import { signInRequest } from '~/store/modules/auth/actions';
@@ -13,6 +13,8 @@ export default function SignIn() {
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
     const [id, setId] = useState('');
+
+    const loading = useSelector((state) => state.auth.loading);
 
     useEffect(() => {
         if (isFocused) {
@@ -41,7 +43,11 @@ export default function SignIn() {
             />
 
             <Button onPress={handleSubmit}>
-                <TextButton>Entrar no sistema</TextButton>
+                {loading ? (
+                    <ActivityIndicator color="#fff" size={20} />
+                ) : (
+                    <TextButton>Entrar no sistema</TextButton>
+                )}
             </Button>
         </Container>
     );

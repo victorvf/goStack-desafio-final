@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { StatusBar, TouchableOpacity } from 'react-native';
+import { StatusBar, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useIsFocused } from '@react-navigation/native';
@@ -33,10 +33,13 @@ export default function Dashboard({ navigation }) {
 
     const [pending, setPending] = useState(true);
     const [delivered, setDelivered] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const [deliveries, setDeliveries] = useState([]);
 
     async function loadDeliveriesDelivered() {
+        setLoading(true);
+
         const response = await api.get(
             `/deliveryman/${deliveryman.id}/orders-delivered`
         );
@@ -45,9 +48,12 @@ export default function Dashboard({ navigation }) {
 
         setPending(!pending);
         setDelivered(!delivered);
+        setLoading(false);
     }
 
     const loadDeliveriesPending = useCallback(async () => {
+        setLoading(true);
+
         const response = await api.get(
             `/deliveryman/${deliveryman.id}/deliveries`
         );
@@ -56,6 +62,8 @@ export default function Dashboard({ navigation }) {
 
         setPending(true);
         setDelivered(false);
+
+        setLoading(false);
     }, [deliveryman.id]);
 
     useEffect(() => {
@@ -102,13 +110,17 @@ export default function Dashboard({ navigation }) {
                     </Button>
                 </ActionButtons>
             </Actions>
-            <DeliveryList
-                data={deliveries}
-                keyExtractor={(item) => String(item.id)}
-                renderItem={({ item }) => (
-                    <Delivery data={item} navigation={navigation} />
-                )}
-            />
+            {loading ? (
+                <ActivityIndicator color="#333" size={30} />
+            ) : (
+                <DeliveryList
+                    data={deliveries}
+                    keyExtractor={(item) => String(item.id)}
+                    renderItem={({ item }) => (
+                        <Delivery data={item} navigation={navigation} />
+                    )}
+                />
+            )}
         </Container>
     );
 }

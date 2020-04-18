@@ -58,8 +58,8 @@ export default function DetailDelivery({ navigation: { navigate }, route }) {
         }
     }, [isFocused]);
 
-    function handleNavigate(routePath, confirm = false) {
-        if (data.end_date || confirm) {
+    function handleNavigate(routePath) {
+        if (data.end_date) {
             Alert.alert(
                 'Erro',
                 'Verifique se encomenda já foi retirada ou entregue'
@@ -130,7 +130,7 @@ export default function DetailDelivery({ navigation: { navigate }, route }) {
                 </Middle>
                 <Button
                     onPress={() => {
-                        handleNavigate('ConfirmDelivery', true);
+                        handleNavigate('ConfirmDelivery');
                     }}
                 >
                     <Icon name="check-circle" size={20} color="#7D40E7" />
