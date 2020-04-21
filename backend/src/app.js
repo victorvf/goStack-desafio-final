@@ -1,10 +1,10 @@
+import './bootstrap';
+
 import express from 'express';
+import 'express-async-errors';
 import { resolve } from 'path';
-import 'dotenv/config';
 import cors from 'cors';
 import * as Sentry from '@sentry/node';
-
-import 'express-async-errors';
 
 import sentryConfig from './config/sentry';
 
@@ -41,7 +41,7 @@ class App {
     }
 
     exceptionHandler() {
-        this.server.use(ExceptionMiddleware)
+        this.server.use(ExceptionMiddleware);
     }
 }
 
