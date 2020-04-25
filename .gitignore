@@ -10,6 +10,7 @@ mongoDb/
 
 # testing
 coverage/
+*.sqlite
 
 # production
 build/
