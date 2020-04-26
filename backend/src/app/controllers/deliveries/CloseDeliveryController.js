@@ -1,4 +1,3 @@
-import * as Yup from 'yup';
 import { parseISO, isBefore, isAfter, startOfHour } from 'date-fns';
 
 import Delivery from '../../models/Delivery';
@@ -6,17 +5,6 @@ import File from '../../models/File';
 
 class CloseDeliveryController {
     async update(request, response) {
-        const schema = Yup.object().shape({
-            end_date: Yup.date().required(),
-            signature_id: Yup.number().required(),
-        });
-
-        if (!(await schema.isValid(request.body))) {
-            return response.status(400).json({
-                error: 'validation fails',
-            });
-        }
-
         const delivery = await Delivery.findOne({
             where: {
                 id: request.params.id,

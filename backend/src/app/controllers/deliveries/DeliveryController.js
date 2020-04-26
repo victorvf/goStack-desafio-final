@@ -1,4 +1,3 @@
-import * as Yup from 'yup';
 import { Op } from 'sequelize';
 
 import File from '../../models/File';
@@ -38,8 +37,8 @@ class DeliveryController {
                             model: File,
                             as: 'avatar',
                             attributes: ['id', 'name', 'path', 'url'],
-                        }
-                    ]
+                        },
+                    ],
                 },
                 {
                     model: Recipient,
@@ -102,18 +101,6 @@ class DeliveryController {
     }
 
     async store(request, response) {
-        const schema = Yup.object().shape({
-            product: Yup.string().required(),
-            recipient_id: Yup.number().required(),
-            deliveryman_id: Yup.number().required(),
-        });
-
-        if (!(await schema.isValid(request.body))) {
-            return response.status(400).json({
-                error: 'validation fails',
-            });
-        }
-
         const deliveryExists = await Delivery.findOne({
             where: {
                 product: request.body.product,
@@ -173,18 +160,6 @@ class DeliveryController {
     }
 
     async update(request, response) {
-        const schema = Yup.object().shape({
-            product: Yup.string(),
-            recipient_id: Yup.number(),
-            deliveryman_id: Yup.number(),
-        });
-
-        if (!(await schema.isValid(request.body))) {
-            return response.status(400).json({
-                error: 'validation fails',
-            });
-        }
-
         const delivery = await Delivery.findByPk(request.params.id);
 
         if (!delivery) {

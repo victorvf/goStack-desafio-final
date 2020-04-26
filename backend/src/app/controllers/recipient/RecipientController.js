@@ -1,7 +1,6 @@
-import * as Yup from 'yup';
 import { Op } from 'sequelize';
 
-import Recipient from '../../models/Recipient.js';
+import Recipient from '../../models/Recipient';
 
 class RecipientController {
     async index(request, response) {
@@ -52,22 +51,6 @@ class RecipientController {
     }
 
     async store(request, response) {
-        const schema = Yup.object().shape({
-            name: Yup.string().required(),
-            cep: Yup.string().required(),
-            state: Yup.string().required(),
-            city: Yup.string().required(),
-            street: Yup.string().required(),
-            number: Yup.number().required(),
-            complement: Yup.string(),
-        });
-
-        if (!(await schema.isValid(request.body))) {
-            return response.status(400).json({
-                error: 'validation fails',
-            });
-        }
-
         const recipientExist = await Recipient.findOne({
             where: {
                 name: request.body.name,
@@ -104,28 +87,6 @@ class RecipientController {
     }
 
     async update(request, response) {
-        const schema = Yup.object().shape({
-            name: Yup.string(),
-            cep: Yup.string(),
-            street: Yup.string().when('cep', (cep, field) =>
-                cep ? field.required() : field
-            ),
-            city: Yup.string().when('street', (street, field) =>
-                street ? field.required() : field
-            ),
-            state: Yup.string().when('city', (city, field) =>
-                city ? field.required() : field
-            ),
-            number: Yup.number(),
-            complement: Yup.string(),
-        });
-
-        if (!(await schema.isValid(request.body))) {
-            return response.status(400).json({
-                error: 'validation fails',
-            });
-        }
-
         const { name } = request.body;
         const recipient = await Recipient.findByPk(request.params.id);
 

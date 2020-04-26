@@ -29,19 +29,21 @@ class CompletedDeliveriesController {
                 'start_date',
                 'end_date',
             ],
-            include: [{
-                model: Recipient,
-                as: 'recipient',
-                attributes: [
-                    'id',
-                    'name',
-                    'cep',
-                    'city',
-                    'state',
-                    'street',
-                    'number',
-                ],
-            }],
+            include: [
+                {
+                    model: Recipient,
+                    as: 'recipient',
+                    attributes: [
+                        'id',
+                        'name',
+                        'cep',
+                        'city',
+                        'state',
+                        'street',
+                        'number',
+                    ],
+                },
+            ],
         });
 
         if (!deliveries) {

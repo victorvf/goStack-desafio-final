@@ -1,4 +1,3 @@
-import * as Yup from 'yup';
 import { Op } from 'sequelize';
 
 import Deliveryman from '../../models/Deliveryman';
@@ -46,20 +45,6 @@ class DeliverymanController {
     }
 
     async store(request, response) {
-        const schema = Yup.object().shape({
-            name: Yup.string().required(),
-            email: Yup.string()
-                .email()
-                .required(),
-            avatar_id: Yup.number(),
-        });
-
-        if (!(await schema.isValid(request.body))) {
-            return response.status(400).json({
-                error: 'validation fails',
-            });
-        }
-
         const deliverymanExists = await Deliveryman.findOne({
             where: {
                 email: request.body.email,
@@ -82,18 +67,6 @@ class DeliverymanController {
     }
 
     async update(request, response) {
-        const schema = Yup.object().shape({
-            name: Yup.string(),
-            email: Yup.string().email(),
-            avatar_id: Yup.number(),
-        });
-
-        if (!(await schema.isValid(request.body))) {
-            return response.status(400).json({
-                error: 'validation fails',
-            });
-        }
-
         const deliveryman = await Deliveryman.findByPk(request.params.id);
 
         if (request.body.email && request.body.email !== deliveryman.email) {
