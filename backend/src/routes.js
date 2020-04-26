@@ -73,7 +73,7 @@ routes.post(
 routes.use(authMiddleware);
 
 // verify user is admin
-routes.use(adminMiddleware);
+// routes.use(adminMiddleware);
 
 routes.get('/users', UserController.index);
 routes.get('/user/:id', UserController.show);

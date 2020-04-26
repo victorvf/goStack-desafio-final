@@ -4,10 +4,9 @@ import File from '../../models/File';
 import Delivery from '../../models/Delivery';
 import Recipient from '../../models/Recipient';
 import Deliveryman from '../../models/Deliveryman';
-import Notification from '../../schemas/Notification';
 
-import Queue from '../../../lib/Queue';
-import DeliveryAvailableMail from '../../jobs/DeliveryAvailableMail';
+import CreateDeliveryService from '../../services/CreateDeliveryService';
+import UpdateDeliveryService from '../../services/UpdateDeliveryService';
 
 class DeliveryController {
     async index(request, response) {
@@ -101,125 +100,34 @@ class DeliveryController {
     }
 
     async store(request, response) {
-        const deliveryExists = await Delivery.findOne({
-            where: {
-                product: request.body.product,
-                recipient_id: request.body.recipient_id,
-                deliveryman_id: request.body.deliveryman_id,
-                canceled_at: null,
-            },
-        });
+        const { product, recipient_id, deliveryman_id } = request.body;
 
-        if (deliveryExists) {
-            return response.status(400).json({
-                error: 'order already exists',
-            });
-        }
-
-        const recipient = await Recipient.findByPk(request.body.recipient_id);
-
-        if (!recipient) {
-            return response.status(404).json({
-                error: 'recipient not found',
-            });
-        }
-
-        const deliveryman = await Deliveryman.findByPk(
-            request.body.deliveryman_id
-        );
-
-        if (!deliveryman) {
-            return response.status(404).json({
-                error: 'deliveryman not found',
-            });
-        }
-
-        const delivery = await Delivery.create(request.body);
-
-        await delivery.reload({
-            attributes: ['id', 'product'],
-            include: [
-                {
-                    model: Deliveryman,
-                    as: 'deliveryman',
-                    attributes: ['name', 'email'],
-                },
-            ],
-        });
-
-        await Notification.create({
-            content: `New delivery available - Product: ${delivery.product}, Code: ${delivery.id}`,
-            deliveryman: deliveryman.id,
-        });
-
-        await Queue.add(DeliveryAvailableMail.key, {
-            delivery,
+        const delivery = await CreateDeliveryService.run({
+            product,
+            recipient_id,
+            deliveryman_id,
         });
 
         return response.json(delivery);
     }
 
     async update(request, response) {
-        const delivery = await Delivery.findByPk(request.params.id);
+        const delivery_id = request.params.id;
 
-        if (!delivery) {
-            return response.status(404).json({
-                error: 'delivery not found',
-            });
-        }
+        const {
+            product,
+            recipient_id,
+            deliveryman_id,
+            signature_id,
+        } = request.body;
 
-        if (request.body.recipient_id) {
-            const recipient = await Deliveryman.findByPk(
-                request.body.recipient_id
-            );
-
-            if (!recipient) {
-                return response.status(404).json({
-                    error: 'recipient not found',
-                });
-            }
-        }
-
-        if (request.body.deliveryman_id) {
-            const deliveryman = await Deliveryman.findByPk(
-                request.body.deliveryman_id
-            );
-
-            if (!deliveryman) {
-                return response.status(404).json({
-                    error: 'deliveryman not found',
-                });
-            }
-        }
-
-        await delivery.update(request.body);
-
-        await delivery.reload({
-            attributes: ['id', 'product'],
-            include: [
-                {
-                    model: Deliveryman,
-                    as: 'deliveryman',
-                    attributes: ['id', 'name', 'email'],
-                },
-            ],
+        const delivery = await UpdateDeliveryService.run({
+            delivery_id,
+            product,
+            recipient_id,
+            deliveryman_id,
+            signature_id,
         });
-
-        if (request.body.deliveryman_id) {
-            await Notification.create({
-                content: `New delivery available - Product: ${delivery.product}, Code: ${delivery.id}`,
-                deliveryman: delivery.deliveryman.id,
-            });
-
-            await Queue.add(DeliveryAvailableMail.key, {
-                delivery,
-            });
-        } else {
-            await Notification.create({
-                content: `Check delivery updated - Code: ${delivery.id}`,
-                deliveryman: delivery.deliveryman.id,
-            });
-        }
 
         return response.json(delivery);
     }
