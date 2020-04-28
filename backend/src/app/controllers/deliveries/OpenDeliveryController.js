@@ -1,4 +1,3 @@
-import * as Yup from 'yup';
 import { Op } from 'sequelize';
 import {
     isBefore,
@@ -37,19 +36,21 @@ class OpenDeliveryController {
                 'start_date',
                 'end_date',
             ],
-            include: [{
-                model: Recipient,
-                as: 'recipient',
-                attributes: [
-                    'id',
-                    'name',
-                    'cep',
-                    'city',
-                    'state',
-                    'street',
-                    'number',
-                ],
-            }],
+            include: [
+                {
+                    model: Recipient,
+                    as: 'recipient',
+                    attributes: [
+                        'id',
+                        'name',
+                        'cep',
+                        'city',
+                        'state',
+                        'street',
+                        'number',
+                    ],
+                },
+            ],
         });
 
         if (!deliveries) {
@@ -62,17 +63,6 @@ class OpenDeliveryController {
     }
 
     async update(request, response) {
-        const schema = Yup.object().shape({
-            delivery: Yup.number().required(),
-            start_date: Yup.date().required(),
-        });
-
-        if (!(await schema.isValid(request.body))) {
-            return response.status(400).json({
-                error: 'validation fails',
-            });
-        }
-
         const delivery = await Delivery.findOne({
             where: {
                 id: request.body.delivery,

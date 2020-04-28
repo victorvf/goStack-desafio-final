@@ -29,11 +29,11 @@ export default function RegisterDeliveryman() {
                 email,
                 avatar_id,
             });
+
+            toast.success('Entregador cadastrado com sucesso!');
+            history.push('/deliveryman');
         } catch (err) {
             toast.error('Falha ao cadastrar entregador!');
-        } finally {
-            history.push('/deliveryman');
-            toast.success('Entregador cadastrado com sucesso!');
         }
     }
 

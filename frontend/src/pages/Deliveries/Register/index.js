@@ -64,11 +64,11 @@ export default function RegisterDelivery() {
                 deliveryman_id,
                 product,
             });
+
+            toast.success('Encomenda salva com sucesso!');
+            history.push('/deliveries');
         } catch (err) {
             toast.error('Falha ao cadastra encomenda!');
-        } finally {
-            history.push('/deliveries');
-            toast.success('Encomenda salva com sucesso!');
         }
     }
 

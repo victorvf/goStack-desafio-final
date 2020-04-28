@@ -36,12 +36,11 @@ export default function RegisterRecipient() {
                 number,
                 complement,
             });
-        } catch (err) {
-            toast.error('Falha ao cadastrar destinatário!');
-        } finally {
-            history.push('/recipient');
 
             toast.success('Destinatário cadastrado com sucesso!');
+            history.push('/recipient');
+        } catch (err) {
+            toast.error('Falha ao cadastrar destinatário!');
         }
     }
 

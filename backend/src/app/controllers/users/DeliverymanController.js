@@ -1,12 +1,21 @@
-import * as Yup from 'yup';
 import { Op } from 'sequelize';
 
 import Deliveryman from '../../models/Deliveryman';
 import File from '../../models/File';
 
+import Cache from '../../../lib/Cache';
+
 class DeliverymanController {
     async index(request, response) {
         const { deliverymanQuery = '', page = 1 } = request.query;
+
+        const cacheKey = `deliverymen:${page}`;
+
+        const cached = await Cache.get(cacheKey);
+
+        if (deliverymanQuery === '' && cached) {
+            return response.json(cached);
+        }
 
         const deliverymen = await Deliveryman.findAll({
             where: {
@@ -22,6 +31,8 @@ class DeliverymanController {
                 attributes: ['id', 'name', 'path', 'url'],
             },
         });
+
+        await Cache.set(cacheKey, deliverymen);
 
         return response.json(deliverymen);
     }
@@ -46,20 +57,6 @@ class DeliverymanController {
     }
 
     async store(request, response) {
-        const schema = Yup.object().shape({
-            name: Yup.string().required(),
-            email: Yup.string()
-                .email()
-                .required(),
-            avatar_id: Yup.number(),
-        });
-
-        if (!(await schema.isValid(request.body))) {
-            return response.status(400).json({
-                error: 'validation fails',
-            });
-        }
-
         const deliverymanExists = await Deliveryman.findOne({
             where: {
                 email: request.body.email,
@@ -74,6 +71,8 @@ class DeliverymanController {
 
         const { id, name, email } = await Deliveryman.create(request.body);
 
+        await Cache.invalidatePrefix('deliverymen');
+
         return response.json({
             id,
             name,
@@ -82,18 +81,6 @@ class DeliverymanController {
     }
 
     async update(request, response) {
-        const schema = Yup.object().shape({
-            name: Yup.string(),
-            email: Yup.string().email(),
-            avatar_id: Yup.number(),
-        });
-
-        if (!(await schema.isValid(request.body))) {
-            return response.status(400).json({
-                error: 'validation fails',
-            });
-        }
-
         const deliveryman = await Deliveryman.findByPk(request.params.id);
 
         if (request.body.email && request.body.email !== deliveryman.email) {
@@ -133,6 +120,8 @@ class DeliverymanController {
             ],
         });
 
+        await Cache.invalidatePrefix('deliverymen');
+
         return response.json(deliveryman);
     }
 
@@ -146,6 +135,8 @@ class DeliverymanController {
         }
 
         await deliveryman.destroy();
+
+        await Cache.invalidatePrefix('deliverymen');
 
         return response.json({
             message: 'Deliveryman success deleted',

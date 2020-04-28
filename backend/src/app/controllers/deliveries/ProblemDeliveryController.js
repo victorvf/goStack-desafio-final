@@ -1,4 +1,3 @@
-import * as Yup from 'yup';
 import { Op } from 'sequelize';
 
 import DeliveryProblem from '../../models/Problem';
@@ -10,7 +9,7 @@ import CancelationMail from '../../jobs/CancelationMail';
 
 class ProblemDeliveryController {
     async index(request, response) {
-        const { problemQuery = '', page = 1} = request.query;
+        const { problemQuery = '', page = 1 } = request.query;
 
         const deliveriesProblem = await DeliveryProblem.findAll({
             where: {
@@ -70,18 +69,8 @@ class ProblemDeliveryController {
     }
 
     async store(request, response) {
-        const schema = Yup.object().shape({
-            description: Yup.string().required(),
-        });
-
-        if (!(await schema.isValid(request.body))) {
-            return response.status(400).json({
-                error: 'validation fails',
-            });
-        }
-
         const delivery_id = request.params.id;
-        const description = request.body.description;
+        const { description } = request.body;
 
         const delivery = await Delivery.findByPk(delivery_id);
 
@@ -96,21 +85,10 @@ class ProblemDeliveryController {
             delivery_id,
         });
 
-        return response.json({problem});
+        return response.json(problem);
     }
 
     async update(request, response) {
-        const schema = Yup.object().shape({
-            description: Yup.string(),
-            delivery_id: Yup.number(),
-        });
-
-        if (!(await schema.isValid(request.body))) {
-            return response.status(400).json({
-                error: 'validation fails',
-            });
-        }
-
         const problem = await DeliveryProblem.findByPk(request.params.id);
 
         if (!problem) {

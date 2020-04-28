@@ -62,11 +62,11 @@ export default function EditDelivery({ location }) {
                 deliveryman_id,
                 product,
             });
+
+            toast.success('Encomenda editada com sucesso!');
+            history.push('/deliveries');
         } catch (err) {
             toast.error('Falha ao editar encomenda!');
-        } finally {
-            history.push('/deliveries');
-            toast.success('Encomenda editada com sucesso!');
         }
     }
 

@@ -47,6 +47,12 @@ git clone https://github.com/victorvf/goStack-fastfeet.git
 
 - docker-compose build
 
+- docker-compose run node yarn db:migrate
+
+- docker-compose run node yarn db:seed:all
+
+- docker-compose down
+
 - docker-compose up
 ```
 

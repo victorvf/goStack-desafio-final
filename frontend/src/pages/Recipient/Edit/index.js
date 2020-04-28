@@ -45,12 +45,11 @@ export default function EditRecipient({ location }) {
                 number,
                 complement,
             });
-        } catch (err) {
-            toast.error('Falha ao editar destinatário!');
-        } finally {
-            history.push('/recipient');
 
             toast.success('Destinatário editado com sucesso!');
+            history.push('/recipient');
+        } catch (err) {
+            toast.error('Falha ao editar destinatário!');
         }
     }
 

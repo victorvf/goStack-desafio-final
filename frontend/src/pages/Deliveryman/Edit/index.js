@@ -30,11 +30,11 @@ export default function EditDeliveryman({ location }) {
                 email,
                 avatar_id,
             });
+
+            toast.success('Entregador editado com sucesso!');
+            history.push('/deliveryman');
         } catch (err) {
             toast.error('Falha ao editar entregador!');
-        } finally {
-            history.push('/deliveryman');
-            toast.success('Entregador editado com sucesso!');
         }
     }
 
