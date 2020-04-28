@@ -18,6 +18,7 @@ const NotificationSchema = new mongoose.Schema(
     },
     {
         timestamps: true,
+        useUnifiedTopology: true,
     }
 );
 

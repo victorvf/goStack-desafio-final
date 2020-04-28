@@ -2,6 +2,7 @@ import Delivery from '../models/Delivery';
 import Deliveryman from '../models/Deliveryman';
 import Notification from '../schemas/Notification';
 
+import Cache from '../../lib/Cache';
 import Queue from '../../lib/Queue';
 import DeliveryAvailableMail from '../jobs/DeliveryAvailableMail';
 
@@ -68,6 +69,8 @@ class UpdateDeliveryService {
                 deliveryman: delivery.deliveryman.id,
             });
         }
+
+        await Cache.invalidatePrefix('deliveries');
 
         return delivery;
     }

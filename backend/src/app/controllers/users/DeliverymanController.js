@@ -3,9 +3,19 @@ import { Op } from 'sequelize';
 import Deliveryman from '../../models/Deliveryman';
 import File from '../../models/File';
 
+import Cache from '../../../lib/Cache';
+
 class DeliverymanController {
     async index(request, response) {
         const { deliverymanQuery = '', page = 1 } = request.query;
+
+        const cacheKey = `deliverymen:${page}`;
+
+        const cached = await Cache.get(cacheKey);
+
+        if (deliverymanQuery === '' && cached) {
+            return response.json(cached);
+        }
 
         const deliverymen = await Deliveryman.findAll({
             where: {
@@ -21,6 +31,8 @@ class DeliverymanController {
                 attributes: ['id', 'name', 'path', 'url'],
             },
         });
+
+        await Cache.set(cacheKey, deliverymen);
 
         return response.json(deliverymen);
     }
@@ -58,6 +70,8 @@ class DeliverymanController {
         }
 
         const { id, name, email } = await Deliveryman.create(request.body);
+
+        await Cache.invalidatePrefix('deliverymen');
 
         return response.json({
             id,
@@ -106,6 +120,8 @@ class DeliverymanController {
             ],
         });
 
+        await Cache.invalidatePrefix('deliverymen');
+
         return response.json(deliveryman);
     }
 
@@ -119,6 +135,8 @@ class DeliverymanController {
         }
 
         await deliveryman.destroy();
+
+        await Cache.invalidatePrefix('deliverymen');
 
         return response.json({
             message: 'Deliveryman success deleted',

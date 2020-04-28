@@ -2,9 +2,19 @@ import { Op } from 'sequelize';
 
 import Recipient from '../../models/Recipient';
 
+import Cache from '../../../lib/Cache';
+
 class RecipientController {
     async index(request, response) {
         const { recipientQuery = '', page = 1 } = request.query;
+
+        const cacheKey = `recipients:${page}`;
+
+        const cached = await Cache.get(cacheKey);
+
+        if (recipientQuery === '' && cached) {
+            return response.json(cached);
+        }
 
         const recipients = await Recipient.findAll({
             where: {
@@ -23,6 +33,8 @@ class RecipientController {
                 'complement',
             ],
         });
+
+        await Cache.set(cacheKey, recipients);
 
         return response.json(recipients);
     }
@@ -74,6 +86,8 @@ class RecipientController {
             complement,
         } = await Recipient.create(request.body);
 
+        await Cache.invalidatePrefix('recipients');
+
         return response.json({
             id,
             name,
@@ -121,6 +135,8 @@ class RecipientController {
             ],
         });
 
+        await Cache.invalidatePrefix('recipients');
+
         return response.json(recipient);
     }
 
@@ -134,6 +150,8 @@ class RecipientController {
         }
 
         await recipient.destroy();
+
+        await Cache.invalidatePrefix('recipients');
 
         return response.json({
             message: 'deleted recipient',

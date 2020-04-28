@@ -8,9 +8,19 @@ import Deliveryman from '../../models/Deliveryman';
 import CreateDeliveryService from '../../services/CreateDeliveryService';
 import UpdateDeliveryService from '../../services/UpdateDeliveryService';
 
+import Cache from '../../../lib/Cache';
+
 class DeliveryController {
     async index(request, response) {
         const { deliveryQuery = '', page = 1 } = request.query;
+
+        const cacheKey = `deliveries:${page}`;
+
+        const cached = await Cache.get(cacheKey);
+
+        if (deliveryQuery === '' && cached) {
+            return response.json(cached);
+        }
 
         const deliveries = await Delivery.findAll({
             where: {
@@ -60,6 +70,8 @@ class DeliveryController {
                 },
             ],
         });
+
+        await Cache.set(cacheKey, deliveries);
 
         return response.json(deliveries);
     }

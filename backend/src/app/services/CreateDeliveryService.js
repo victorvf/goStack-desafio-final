@@ -4,6 +4,7 @@ import Deliveryman from '../models/Deliveryman';
 
 import Notification from '../schemas/Notification';
 
+import Cache from '../../lib/Cache';
 import Queue from '../../lib/Queue';
 import DeliveryAvailableMail from '../jobs/DeliveryAvailableMail';
 
@@ -59,6 +60,8 @@ class CreateDeliveryService {
         await Queue.add(DeliveryAvailableMail.key, {
             delivery,
         });
+
+        await Cache.invalidatePrefix('deliveries');
 
         return delivery;
     }
