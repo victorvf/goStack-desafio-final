@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useField } from '@rocketseat/unform';
 
 import api from '~/services/api';
@@ -23,10 +23,10 @@ export default function AvatarInput() {
         }
     }, [ref, registerField]);
 
-    async function handleChange(e) {
+    const handleChange = useCallback(async (event) => {
         const data = new FormData();
 
-        data.append('file', e.target.files[0]);
+        data.append('file', event.target.files[0]);
 
         const response = await api.post('/file/create', data);
 
@@ -35,7 +35,7 @@ export default function AvatarInput() {
         setFile(id);
 
         setPreview(url);
-    }
+    }, []);
 
     return (
         <Container>

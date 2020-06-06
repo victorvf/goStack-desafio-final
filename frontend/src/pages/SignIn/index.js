@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import * as Yup from 'yup';
 import { FaSpinner } from 'react-icons/fa';
 import { Form, Input } from '@rocketseat/unform';
@@ -21,9 +21,12 @@ export default function SignIn() {
     const dispatch = useDispatch();
     const loading = useSelector((state) => state.auth.loading);
 
-    function handleSubmit({ email, password }) {
-        dispatch(signInRequest(email, password));
-    }
+    const handleSubmit = useCallback(
+        ({ email, password }) => {
+            dispatch(signInRequest(email, password));
+        },
+        [dispatch]
+    );
 
     return (
         <>

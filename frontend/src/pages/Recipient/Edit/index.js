@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import * as Yup from 'yup';
 import { Form, Input } from '@rocketseat/unform';
 import { MdDone, MdKeyboardArrowLeft } from 'react-icons/md';
@@ -32,26 +32,37 @@ const schema = Yup.object().shape({
 export default function EditRecipient({ location }) {
     const { recipient } = location.state;
 
-    async function handleSubmit(data) {
-        try {
-            const { name, cep, state, city, street, number, complement } = data;
+    const handleSubmit = useCallback(
+        async (data) => {
+            try {
+                const {
+                    name,
+                    cep,
+                    state,
+                    city,
+                    street,
+                    number,
+                    complement,
+                } = data;
 
-            await api.put(`/recipient/${recipient.id}/update`, {
-                name,
-                cep,
-                state,
-                city,
-                street,
-                number,
-                complement,
-            });
+                await api.put(`/recipient/${recipient.id}/update`, {
+                    name,
+                    cep,
+                    state,
+                    city,
+                    street,
+                    number,
+                    complement,
+                });
 
-            toast.success('Destinatário editado com sucesso!');
-            history.push('/recipient');
-        } catch (err) {
-            toast.error('Falha ao editar destinatário!');
-        }
-    }
+                toast.success('Destinatário editado com sucesso!');
+                history.push('/recipient');
+            } catch (err) {
+                toast.error('Falha ao editar destinatário!');
+            }
+        },
+        [recipient]
+    );
 
     return (
         <Container>

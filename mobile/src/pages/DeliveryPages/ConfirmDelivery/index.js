@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Alert, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -24,7 +24,7 @@ export default function ConfirmDelivery({ navigation: { navigate }, route }) {
     const [photo, setPhoto] = useState(0);
     const [visible, setVisible] = useState(false);
 
-    async function handleTakeSignature() {
+    const handleTakeSignature = useCallback(async () => {
         try {
             setLoading(true);
 
@@ -46,12 +46,13 @@ export default function ConfirmDelivery({ navigation: { navigate }, route }) {
 
             Alert.alert('Falha', 'Erro ao capturar foto!');
         }
-    }
+    }, [cameraCurrent, visible]);
 
-    async function handleSubmit() {
+    const handleSubmit = useCallback(async () => {
         try {
             setLoading(true);
 
+            // eslint-disable-next-line no-undef
             const data = new FormData();
 
             data.append('file', {
@@ -83,7 +84,7 @@ export default function ConfirmDelivery({ navigation: { navigate }, route }) {
                 'Verifique se vocês está confirmando entrega no horario certo!'
             );
         }
-    }
+    }, [id, navigate, photo]);
 
     return (
         <>

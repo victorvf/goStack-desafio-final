@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useState, useCallback } from 'react';
 import * as Yup from 'yup';
 import { Form, Input, Select } from '@rocketseat/unform';
 import { MdDone, MdKeyboardArrowLeft } from 'react-icons/md';
@@ -22,10 +23,7 @@ const schema = Yup.object().shape({
 });
 
 export default function RegisterDelivery() {
-    const [recipients, setRecipients] = useState([]);
-    const [deliverymans, setDeliverymans] = useState([]);
-
-    async function loadRecipients() {
+    const [recipients, _] = useState(async () => {
         const response = await api.get('/recipients');
 
         const data = response.data.map((recipient) => {
@@ -35,10 +33,9 @@ export default function RegisterDelivery() {
             return { id, title };
         });
 
-        setRecipients(data);
-    }
-
-    async function loadDeliverymen() {
+        return data || [];
+    });
+    const [deliverymans, __] = useState(async () => {
         const response = await api.get('/deliverymen');
 
         const data = response.data.map((deliveryman) => {
@@ -48,29 +45,26 @@ export default function RegisterDelivery() {
             return { id, title };
         });
 
-        setDeliverymans(data);
-    }
+        return data || [];
+    });
 
-    useEffect(() => {
-        loadRecipients();
+    const handleSubmit = useCallback(
+        async ({ recipient_id, deliveryman_id, product }) => {
+            try {
+                await api.post('/order/create', {
+                    recipient_id,
+                    deliveryman_id,
+                    product,
+                });
 
-        loadDeliverymen();
-    }, []);
-
-    async function handleSubmit({ recipient_id, deliveryman_id, product }) {
-        try {
-            await api.post('/order/create', {
-                recipient_id,
-                deliveryman_id,
-                product,
-            });
-
-            toast.success('Encomenda salva com sucesso!');
-            history.push('/deliveries');
-        } catch (err) {
-            toast.error('Falha ao cadastra encomenda!');
-        }
-    }
+                toast.success('Encomenda salva com sucesso!');
+                history.push('/deliveries');
+            } catch (err) {
+                toast.error('Falha ao cadastra encomenda!');
+            }
+        },
+        []
+    );
 
     return (
         <Container>

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useCallback } from 'react';
 import { View, StatusBar, Alert, TouchableOpacity } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import PropTypes from 'prop-types';
@@ -35,7 +35,7 @@ export default function DetailDelivery({ navigation: { navigate }, route }) {
         return data.end_date ? dateFormat(data.end_date) : null;
     }, [data.end_date]);
 
-    function handleStatus() {
+    const handleStatus = useCallback(() => {
         let status;
 
         if (data.end_date) {
@@ -49,7 +49,7 @@ export default function DetailDelivery({ navigation: { navigate }, route }) {
         }
 
         return status;
-    }
+    }, [data]);
 
     useEffect(() => {
         if (isFocused) {
@@ -58,16 +58,19 @@ export default function DetailDelivery({ navigation: { navigate }, route }) {
         }
     }, [isFocused]);
 
-    function handleNavigate(routePath) {
-        if (data.end_date) {
-            Alert.alert(
-                'Erro',
-                'Verifique se encomenda já foi retirada ou entregue'
-            );
-        } else {
-            navigate(routePath, { id: data.id });
-        }
-    }
+    const handleNavigate = useCallback(
+        (routePath) => {
+            if (data.end_date) {
+                Alert.alert(
+                    'Erro',
+                    'Verifique se encomenda já foi retirada ou entregue'
+                );
+            } else {
+                navigate(routePath, { id: data.id });
+            }
+        },
+        [data, navigate]
+    );
 
     return (
         <Container>

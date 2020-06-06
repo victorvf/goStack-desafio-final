@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { MdMoreHoriz } from 'react-icons/md';
 
@@ -7,9 +7,9 @@ import { Container, MoreButton, ActionsList } from './styles';
 export default function Actions({ children, ...props }) {
     const [visible, setVisible] = useState(false);
 
-    function handleVisible() {
+    const handleVisible = useCallback(() => {
         setVisible(!visible);
-    }
+    }, [visible]);
 
     return (
         <Container>

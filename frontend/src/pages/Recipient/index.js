@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { MdSearch, MdEdit, MdDelete, MdAdd } from 'react-icons/md';
 import { toast } from 'react-toastify';
 
@@ -27,36 +27,40 @@ export default function Recipient() {
         loadRecipients();
     }, [recipientQuery, page]);
 
-    async function handleRemove(id) {
-        const alertRemove = window.confirm(
-            'Tem certeza que deseja excluir o destinatário ?'
-        );
+    const handleRemove = useCallback(
+        async (id) => {
+            // eslint-disable-next-line no-alert
+            const alertRemove = window.confirm(
+                'Tem certeza que deseja excluir o destinatário ?'
+            );
 
-        if (!alertRemove) return;
+            if (!alertRemove) return;
 
-        try {
-            await api.delete(`/recipient/${id}/delete`);
+            try {
+                await api.delete(`/recipient/${id}/delete`);
 
-            const newRecipients = recipients.filter((r) => r.id !== id);
+                const newRecipients = recipients.filter((r) => r.id !== id);
 
-            setRecipients(newRecipients);
-        } catch (err) {
-            toast.error('Falha ao excluir destinatário! Tente novamente');
-        } finally {
-            toast.success('Destinatário excluído com sucesso!');
-        }
-    }
+                setRecipients(newRecipients);
+            } catch (err) {
+                toast.error('Falha ao excluir destinatário! Tente novamente');
+            } finally {
+                toast.success('Destinatário excluído com sucesso!');
+            }
+        },
+        [recipients]
+    );
 
-    function handleEdit(recipient) {
+    const handleEdit = useCallback((recipient) => {
         history.push({
             pathname: '/recipient/edit',
             state: { recipient },
         });
-    }
+    }, []);
 
-    function handleQuery(event) {
+    const handleQuery = useCallback((event) => {
         setRecipientQuery(event.target.value);
-    }
+    }, []);
 
     return (
         <>

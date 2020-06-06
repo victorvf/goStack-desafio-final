@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
     MdSearch,
     MdRemoveRedEye,
@@ -7,9 +7,9 @@ import {
     MdAdd,
     MdClose,
 } from 'react-icons/md';
-import { parseISO } from 'date-fns';
-import { format } from 'date-fns-tz';
 import { toast } from 'react-toastify';
+
+import formatDate from '../../utils/formatDate';
 
 import api from '~/services/api';
 import history from '~/services/history';
@@ -40,100 +40,113 @@ export default function Deliveries() {
     const [deliveryView, setDeliveryView] = useState({});
     const [view, setView] = useState(false);
 
+    const handleDeliveryStatus = useCallback((data) => {
+        const deliveryStatus = data.map((delivery) => {
+            if (delivery.end_date) {
+                delivery.status = 'ENTREGUE';
+            } else if (delivery.canceled_at) {
+                delivery.status = 'CANCELADA';
+            } else if (delivery.start_date) {
+                delivery.status = 'RETIRADA';
+            } else {
+                delivery.status = 'PENDENTE';
+            }
+
+            return delivery;
+        });
+
+        return deliveryStatus;
+    }, []);
+
     useEffect(() => {
         async function loadDeliveries() {
             const response = await api.get('/orders', {
                 params: { deliveryQuery, page },
             });
 
-            const data = response.data.map((delivery) => {
-                if (delivery.end_date) {
-                    delivery.status = 'ENTREGUE';
-                } else if (delivery.canceled_at) {
-                    delivery.status = 'CANCELADA';
-                } else if (delivery.start_date) {
-                    delivery.status = 'RETIRADA';
-                } else {
-                    delivery.status = 'PENDENTE';
-                }
-
-                return delivery;
-            });
+            const data = handleDeliveryStatus(response.data);
 
             setDeliveries(data);
         }
 
         loadDeliveries();
-    }, [deliveryQuery, page]);
+    }, [deliveryQuery, page, handleDeliveryStatus]);
 
-    function handleDeliveryView(data) {
-        const { street, number, city, state, cep } = data.recipient;
-        const { start_date, end_date } = data;
+    const handleDeliveryView = useCallback(
+        (data) => {
+            const { street, number, city, state, cep } = data.recipient;
+            const { start_date, end_date } = data;
 
-        let url = null;
+            let url = null;
 
-        if (data.signature) {
-            url = data.signature.url;
-        }
+            if (data.signature) {
+                url = data.signature.url;
+            }
 
-        const startDateFormatted = start_date
-            ? format(parseISO(start_date), 'dd/MM/yyyy - HH:mm')
-            : 'data indisponível';
+            const startDateFormatted = start_date
+                ? formatDate(start_date)
+                : 'data indisponível';
 
-        const endDateFormatted = end_date
-            ? format(parseISO(end_date), 'dd/MM/yyyy - HH:mm')
-            : 'data indisponível';
+            const endDateFormatted = end_date
+                ? formatDate(end_date)
+                : 'data indisponível';
 
-        setDeliveryView({
-            street,
-            number,
-            city,
-            state,
-            cep,
-            start_date: startDateFormatted,
-            end_date: endDateFormatted,
-            url,
-        });
+            setDeliveryView({
+                street,
+                number,
+                city,
+                state,
+                cep,
+                start_date: startDateFormatted,
+                end_date: endDateFormatted,
+                url,
+            });
 
-        setView(!view);
-    }
+            setView(!view);
+        },
+        [view]
+    );
 
-    function handleCloseView() {
+    const handleCloseView = useCallback(() => {
         setDeliveryView({});
 
         setView(!view);
-    }
+    }, [view]);
 
-    async function handleRemove(id) {
-        const removeAlert = window.confirm(
-            'Tem certeza que deseja excluir a encomenda ?'
-        );
+    const handleRemove = useCallback(
+        async (id) => {
+            // eslint-disable-next-line no-alert
+            const removeAlert = window.confirm(
+                'Tem certeza que deseja excluir a encomenda ?'
+            );
 
-        if (!removeAlert) return;
+            if (!removeAlert) return;
 
-        try {
-            await api.delete(`/order/${id}/delete`);
+            try {
+                await api.delete(`/order/${id}/delete`);
 
-            const newDeliveries = deliveries.filter((d) => d.id !== id);
+                const newDeliveries = deliveries.filter((d) => d.id !== id);
 
-            setDeliveries(newDeliveries);
-        } catch (err) {
-            toast.error('Falha ao excluir encomenda! Tente novamente');
-        } finally {
-            toast.success('Encomenda excluída com sucesso!');
-        }
-    }
+                setDeliveries(newDeliveries);
+            } catch (err) {
+                toast.error('Falha ao excluir encomenda! Tente novamente');
+            } finally {
+                toast.success('Encomenda excluída com sucesso!');
+            }
+        },
+        [deliveries]
+    );
 
-    function handleEdit(delivery) {
+    const handleEdit = useCallback((delivery) => {
         history.push({
             pathname: '/deliveries/edit',
             state: { delivery },
         });
-    }
+    }, []);
 
-    function handleQuery(event) {
+    const handleQuery = useCallback((event) => {
         setDeliveryQuery(event.target.value);
-    }
+    }, []);
 
     return (
         <>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { TouchableOpacity, ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -12,7 +12,7 @@ export default function ReportProblem({ navigation: { goBack }, route }) {
     const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(false);
 
-    async function handleSubmit() {
+    const handleSubmit = useCallback(async () => {
         setLoading(true);
 
         await api.post(`/delivery/${id}/create-problem`, { description });
@@ -20,7 +20,7 @@ export default function ReportProblem({ navigation: { goBack }, route }) {
         setLoading(false);
 
         goBack();
-    }
+    }, [description, goBack, id]);
 
     return (
         <>

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useCallback } from 'react';
 import { StatusBar } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -35,9 +35,9 @@ export default function Profile() {
         }
     }, [isFocused]);
 
-    function handleSignOut() {
+    const handleSignOut = useCallback(() => {
         dispatch(signOut());
-    }
+    }, [dispatch]);
 
     return (
         <Container>

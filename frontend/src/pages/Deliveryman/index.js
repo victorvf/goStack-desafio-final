@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { MdSearch, MdEdit, MdDelete, MdAdd } from 'react-icons/md';
 import { toast } from 'react-toastify';
 
@@ -27,36 +27,40 @@ export default function Deliveryman() {
         loadDeliverymen();
     }, [deliverymanQuery, page]);
 
-    async function handleRemove(id) {
-        const removeAlert = window.confirm(
-            'Tem certeza que deseja excluir o entregador ?'
-        );
+    const handleRemove = useCallback(
+        async (id) => {
+            // eslint-disable-next-line no-alert
+            const removeAlert = window.confirm(
+                'Tem certeza que deseja excluir o entregador ?'
+            );
 
-        if (!removeAlert) return;
+            if (!removeAlert) return;
 
-        try {
-            await api.delete(`/deliveryman/${id}/delete`);
+            try {
+                await api.delete(`/deliveryman/${id}/delete`);
 
-            const newDeliverymans = deliverymans.filter((d) => d.id !== id);
+                const newDeliverymans = deliverymans.filter((d) => d.id !== id);
 
-            setDeliverymans(newDeliverymans);
-        } catch (err) {
-            toast.error('Falha ao excluir entregador! Tente novamente');
-        } finally {
-            toast.success('Entregador excluído com sucesso!');
-        }
-    }
+                setDeliverymans(newDeliverymans);
+            } catch (err) {
+                toast.error('Falha ao excluir entregador! Tente novamente');
+            } finally {
+                toast.success('Entregador excluído com sucesso!');
+            }
+        },
+        [deliverymans]
+    );
 
-    function handleEdit(deliveryman) {
+    const handleEdit = useCallback((deliveryman) => {
         history.push({
             pathname: '/deliveryman/edit',
             state: { deliveryman },
         });
-    }
+    }, []);
 
-    function handleQuery(event) {
+    const handleQuery = useCallback((event) => {
         setDeliverymanQuery(event.target.value);
-    }
+    }, []);
 
     return (
         <>

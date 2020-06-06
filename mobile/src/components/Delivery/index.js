@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import PropTypes from 'prop-types';
 
@@ -27,9 +27,9 @@ export default function Delivery({ data, navigation: { navigate } }) {
         return data.start_date ? dateFormat(data.start_date) : null;
     }, [data.start_date]);
 
-    function handleNavigation() {
+    const handleNavigation = useCallback(() => {
         navigate('DetailDelivery', { data });
-    }
+    }, [navigate, data]);
 
     return (
         <Container>
