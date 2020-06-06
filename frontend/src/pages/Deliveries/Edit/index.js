@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, useCallback } from 'react';
 import * as Yup from 'yup';
 import { Form, Input, Select } from '@rocketseat/unform';
 import { MdDone, MdKeyboardArrowLeft } from 'react-icons/md';
@@ -20,10 +21,8 @@ const schema = Yup.object().shape({
 
 export default function EditDelivery({ location }) {
     const { delivery } = location.state;
-    const [recipients, setRecipients] = useState([]);
-    const [deliverymans, setDeliverymans] = useState([]);
 
-    async function loadRecipients() {
+    const [recipients, _] = useState(async () => {
         const response = await api.get('/recipients');
 
         const data = response.data.map((recipient) => {
@@ -33,10 +32,10 @@ export default function EditDelivery({ location }) {
             return { id, title };
         });
 
-        setRecipients(data);
-    }
+        return data || [];
+    });
 
-    async function loadDeliverymen() {
+    const [deliverymans, __] = useState(async () => {
         const response = await api.get('/deliverymen');
 
         const data = response.data.map((deliveryman) => {
@@ -46,29 +45,26 @@ export default function EditDelivery({ location }) {
             return { id, title };
         });
 
-        setDeliverymans(data);
-    }
+        return data || [];
+    });
 
-    useEffect(() => {
-        loadRecipients();
+    const handleSubmit = useCallback(
+        async ({ recipient_id, deliveryman_id, product }) => {
+            try {
+                await api.put(`/order/${delivery.id}/update`, {
+                    recipient_id,
+                    deliveryman_id,
+                    product,
+                });
 
-        loadDeliverymen();
-    }, []);
-
-    async function handleSubmit({ recipient_id, deliveryman_id, product }) {
-        try {
-            await api.put(`/order/${delivery.id}/update`, {
-                recipient_id,
-                deliveryman_id,
-                product,
-            });
-
-            toast.success('Encomenda editada com sucesso!');
-            history.push('/deliveries');
-        } catch (err) {
-            toast.error('Falha ao editar encomenda!');
-        }
-    }
+                toast.success('Encomenda editada com sucesso!');
+                history.push('/deliveries');
+            } catch (err) {
+                toast.error('Falha ao editar encomenda!');
+            }
+        },
+        [delivery]
+    );
 
     return (
         <Container>

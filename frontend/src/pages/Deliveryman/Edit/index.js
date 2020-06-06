@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import * as Yup from 'yup';
 import { Form, Input } from '@rocketseat/unform';
 import { MdDone, MdKeyboardArrowLeft } from 'react-icons/md';
@@ -23,20 +23,23 @@ const schema = Yup.object().shape({
 export default function EditDeliveryman({ location }) {
     const { deliveryman } = location.state;
 
-    async function handleSubmit({ name, email, avatar_id }) {
-        try {
-            await api.put(`/deliveryman/${deliveryman.id}/update`, {
-                name,
-                email,
-                avatar_id,
-            });
+    const handleSubmit = useCallback(
+        async ({ name, email, avatar_id }) => {
+            try {
+                await api.put(`/deliveryman/${deliveryman.id}/update`, {
+                    name,
+                    email,
+                    avatar_id,
+                });
 
-            toast.success('Entregador editado com sucesso!');
-            history.push('/deliveryman');
-        } catch (err) {
-            toast.error('Falha ao editar entregador!');
-        }
-    }
+                toast.success('Entregador editado com sucesso!');
+                history.push('/deliveryman');
+            } catch (err) {
+                toast.error('Falha ao editar entregador!');
+            }
+        },
+        [deliveryman]
+    );
 
     return (
         <Container>

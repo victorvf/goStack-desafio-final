@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { MdRemoveRedEye, MdDelete, MdClose, MdSearch } from 'react-icons/md';
 
 import api from '~/services/api';
@@ -33,23 +33,26 @@ export default function Problem() {
         loadProblems();
     }, [problemQuery, page]);
 
-    function handleProblemView(data) {
-        const { description } = data;
+    const handleProblemView = useCallback(
+        (data) => {
+            const { description } = data;
 
-        setProblemView({ description });
+            setProblemView({ description });
 
-        setView(!view);
-    }
+            setView(!view);
+        },
+        [view]
+    );
 
-    function handleCloseView() {
+    const handleCloseView = useCallback(() => {
         setProblemView({});
 
         setView(!view);
-    }
+    }, [view]);
 
-    function handleQuery(event) {
+    const handleQuery = useCallback((event) => {
         setProblemQuery(event.target.value);
-    }
+    }, []);
 
     return (
         <>

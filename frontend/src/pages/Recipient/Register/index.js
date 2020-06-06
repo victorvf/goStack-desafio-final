@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import * as Yup from 'yup';
 import { Form, Input } from '@rocketseat/unform';
 import { MdDone, MdKeyboardArrowLeft } from 'react-icons/md';
@@ -23,7 +23,7 @@ const schema = Yup.object().shape({
 });
 
 export default function RegisterRecipient() {
-    async function handleSubmit(data) {
+    const handleSubmit = useCallback(async (data) => {
         try {
             const { name, cep, state, city, street, number, complement } = data;
 
@@ -42,7 +42,7 @@ export default function RegisterRecipient() {
         } catch (err) {
             toast.error('Falha ao cadastrar destinatário!');
         }
-    }
+    }, []);
 
     return (
         <Container>

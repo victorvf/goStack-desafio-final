@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import * as Yup from 'yup';
 import { Form, Input } from '@rocketseat/unform';
 import { MdDone, MdKeyboardArrowLeft } from 'react-icons/md';
@@ -22,7 +22,7 @@ const schema = Yup.object().shape({
 });
 
 export default function RegisterDeliveryman() {
-    async function handleSubmit({ name, email, avatar_id }) {
+    const handleSubmit = useCallback(async ({ name, email, avatar_id }) => {
         try {
             await api.post('/deliveryman/create', {
                 name,
@@ -35,7 +35,7 @@ export default function RegisterDeliveryman() {
         } catch (err) {
             toast.error('Falha ao cadastrar entregador!');
         }
-    }
+    }, []);
 
     return (
         <Container>
