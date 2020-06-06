@@ -37,7 +37,7 @@ export default function Dashboard({ navigation }) {
 
     const [deliveries, setDeliveries] = useState([]);
 
-    async function loadDeliveriesDelivered() {
+    const loadDeliveriesDelivered = useCallback(async () => {
         setLoading(true);
 
         const response = await api.get(
@@ -49,7 +49,7 @@ export default function Dashboard({ navigation }) {
         setPending(!pending);
         setDelivered(!delivered);
         setLoading(false);
-    }
+    }, [deliveryman, delivered, pending]);
 
     const loadDeliveriesPending = useCallback(async () => {
         setLoading(true);
@@ -64,7 +64,7 @@ export default function Dashboard({ navigation }) {
         setDelivered(false);
 
         setLoading(false);
-    }, [deliveryman.id]);
+    }, [deliveryman]);
 
     useEffect(() => {
         if (isFocused) {
@@ -75,9 +75,9 @@ export default function Dashboard({ navigation }) {
         }
     }, [isFocused, loadDeliveriesPending]);
 
-    function handleSignOut() {
+    const handleSignOut = useCallback(() => {
         dispatch(signOut());
-    }
+    }, [dispatch]);
 
     return (
         <Container>

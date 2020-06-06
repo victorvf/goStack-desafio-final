@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { StatusBar, ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
@@ -23,9 +23,9 @@ export default function SignIn() {
         }
     }, [isFocused]);
 
-    function handleSubmit() {
+    const handleSubmit = useCallback(() => {
         dispatch(signInRequest(id));
-    }
+    }, [dispatch, id]);
 
     return (
         <Container>
